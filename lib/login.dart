@@ -1,5 +1,5 @@
+import 'package:auxilium/widget/sign_up_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/widget/sign_up_widget.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key, required this.title}) : super(key: key);

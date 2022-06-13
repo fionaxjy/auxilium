@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/widget/google_sign_in_button_widget.dart';
 
 class SignUpWidget extends StatelessWidget {
   @override
@@ -31,4 +30,21 @@ class SignUpWidget extends StatelessWidget {
           const Spacer(),
         ],
       );
+
+  Widget GoogleButtonWidget() {
+    return Container(
+        padding: const EdgeInsets.all(4),
+        child: OutlinedButton.icon(
+          label: const Text(
+            'Sign In With Google',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+              color: Colors.black,
+            ),
+          ),
+          onPressed: () {},
+          icon: const Icon(Icons.login),
+        ));
+  }
 }
