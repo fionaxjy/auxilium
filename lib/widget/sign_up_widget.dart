@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import '../api/google_sign_in_api.dart';
 
 class SignUpWidget extends StatelessWidget {
   @override
@@ -12,7 +15,7 @@ class SignUpWidget extends StatelessWidget {
             child: Container(
               margin: const EdgeInsets.symmetric(horizontal: 20),
               width: 175,
-              child: const Text('Login Page',
+              child: const Text('Auxilium',
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 30,
@@ -23,18 +26,23 @@ class SignUpWidget extends StatelessWidget {
           const Spacer(),
           GoogleButtonWidget(),
           const SizedBox(height: 12),
-          const Text(
-            'Login to continue',
-            style: TextStyle(fontSize: 16),
-          ),
           const Spacer(),
         ],
       );
 
   Widget GoogleButtonWidget() {
     return Container(
+        margin: EdgeInsets.all(10),
         padding: const EdgeInsets.all(4),
-        child: OutlinedButton.icon(
+        child: ElevatedButton.icon(
+          style: ElevatedButton.styleFrom(
+            primary: Color.fromARGB(255, 238, 238, 238),
+            minimumSize: const Size(double.infinity, 50),
+          ),
+          icon: const FaIcon(
+            FontAwesomeIcons.google,
+            color: Color.fromARGB(255, 255, 106, 0),
+          ),
           label: const Text(
             'Sign In With Google',
             style: TextStyle(
@@ -43,8 +51,11 @@ class SignUpWidget extends StatelessWidget {
               color: Colors.black,
             ),
           ),
-          onPressed: () {},
-          icon: const Icon(Icons.login),
+          onPressed: signIn,
         ));
+  }
+
+  Future signIn() async {
+    await GoogleSignInApi.login();
   }
 }
