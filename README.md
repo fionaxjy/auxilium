@@ -1,16 +1,11 @@
-# auxilium
+# Auxilium
 
-A new Flutter project.
+A mobile application to facilitate the mutual aid process between users, where users can be both donors and recipients of monetary and non-monetary resources.
 
-## Getting Started
+## Longer Description
 
-This project is a starting point for a Flutter application.
+Mutual aid is a community initiative where people come together to offer and seek help from each other, ensuring that community needs are met. Unlike charity organizations/government aid, there is less of a top-down approach and fewer bureaucratic processes. Consequently, this reduces time lag and ensures that individuals can have more immediate needs met. It serves as a stop-gap measure, not replacing government aid, but instead bridging a systemic gap.
 
-A few resources to get you started if this is your first Flutter project:
+However, the organization of current local initiatives is disorganised, using spreadsheets and communication channels like Telegram and Whatsapp to disseminate information. Hence, the meeting of requests is done by volunteers, leading to inefficiency and labor-intensiveness.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Our app thus organizes the mutual-aid system into a database, streamlining and automating the process. The forum function also facilitates community building, one of the key aspects of the mutual-aid ecosystem.
