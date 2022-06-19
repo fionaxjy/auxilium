@@ -6,7 +6,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 GoogleSignIn _googleSignIn = GoogleSignIn(
   scopes: <String>[
     'email',
-    'https://www.googleapis.com/auth/contacts.readonly',
   ],
 );
 
@@ -46,25 +45,9 @@ class LoginState extends State<LoginPage> {
 
   Widget buildSignUp() {
     final GoogleSignInAccount? user = _currentUser;
-    if (user != null) {
-      return Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            ListTile(
-              leading: GoogleUserCircleAvatar(
-                identity: user,
-              ),
-              title: Text(user.displayName ?? ''),
-              subtitle: Text(user.email),
-            ),
-            const Text('Signed in successfully.'),
 
-            // SIGN OUT
-            ElevatedButton(
-              onPressed: _handleSignOut,
-              child: const Text('SIGN OUT'),
-            ),
-          ]);
+    if (user != null) {
+      return myAccountPage(user);
     } else {
       return Column(
         children: [
@@ -115,6 +98,27 @@ class LoginState extends State<LoginPage> {
           // SIGN IN
           onPressed: _handleSignIn,
         ));
+  }
+
+  Widget myAccountPage(GoogleSignInAccount user) {
+    return Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: <Widget>[
+          ListTile(
+            leading: GoogleUserCircleAvatar(
+              identity: user,
+            ),
+            title: Text(user.displayName ?? ''),
+            subtitle: Text(user.email),
+          ),
+          const Text('Signed in successfully.'),
+
+          // SIGN OUT
+          ElevatedButton(
+            onPressed: _handleSignOut,
+            child: const Text('SIGN OUT'),
+          ),
+        ]);
   }
 
   @override
