@@ -38,6 +38,8 @@ dependencies:
   font_awesome_flutter: ^9.0.0
 
   google_sign_in: ^5.3.3
+  http: ^0.13.4
+  mysql1: ^0.19.2
 
 dev_dependencies:
   flutter_test:
