@@ -84,24 +84,19 @@ Future<void> createTables(MySqlConnection conn) async {
   print("Created table!");
 }
 
-Future<void> insertRows(MySqlConnection conn) async {
-  print("Inserting rows ...");
-  List<StreamedResults> r1 = await (await conn.preparedWithAll(
-          "INSERT INTO PERSON (UserID, PersonName, MobileNo, BankAccNo, Bio) VALUES (?, ?, ?, ?, ?)",
-          [
-        ["dorothy", "Dorothy Yuan", "92700483", "01234567890", "Hello there!"],
-        ["fiona", "Fiona Xiao", "84376698", "01234567890", "Wet Texter"]
-      ])) // ??? ISSUE: CODE GETS STUCK HERE AND DOESNT CONTINUE. NOT SURE WHY.
-      .toList();
-  //print("Person table insert: " + r1.map((r) => r.insertId).toString());
-  print("Rows inserted!");
+Future<void> newUser(MySqlConnection conn) async {
+  print('Creating user...');
+  await conn.prepared(
+      'INSERT INTO PERSON (UserID, PersonName, MobileNo, BankAccNo, Bio) VALUES (?, ?, ?, ?, ?)',
+      ['dorothy', 'Dorothy Yuan', '92700483', '01234567890', 'Hello there!']);
+  print('user created!');
 }
 
 Future<void> readData(MySqlConnection conn) async {
   Results result =
       await (await conn.execute('SELECT * FROM person;')).deStream();
   print(result);
-  print(result.map((r) => r.byName('name')));
+  print(result.map((r) => r.byName('PersonName')));
 }
 
 testsql() async {
@@ -120,8 +115,10 @@ testsql() async {
 
   await dropTables(conn);
   await createTables(conn);
-  await insertRows(conn);
+  await newUser(conn);
+  //await insertRows(conn);
   await readData(conn);
 
   await conn.close();
+  print('done');
 }
