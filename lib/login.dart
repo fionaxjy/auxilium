@@ -3,6 +3,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:async';
 import 'package:google_sign_in/google_sign_in.dart';
 
+import 'mysqlqueries.dart';
+
 GoogleSignIn _googleSignIn = GoogleSignIn(
   scopes: <String>[
     'email',
@@ -10,20 +12,20 @@ GoogleSignIn _googleSignIn = GoogleSignIn(
 );
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  const LoginPage({Key key}) : super(key: key);
   @override
   State createState() => LoginState();
 }
 
 class LoginState extends State<LoginPage> {
-  GoogleSignInAccount? _currentUser;
+  GoogleSignInAccount _currentUser;
 
   // initState only runs when user is logged in
   // check if logged in user is the same
   @override
   void initState() {
     super.initState();
-    _googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount? account) {
+    _googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount account) {
       setState(() {
         _currentUser = account;
       });
@@ -44,7 +46,7 @@ class LoginState extends State<LoginPage> {
   Future<void> _handleSignOut() => _googleSignIn.disconnect();
 
   Widget buildSignUp() {
-    final GoogleSignInAccount? user = _currentUser;
+    final GoogleSignInAccount user = _currentUser;
 
     if (user != null) {
       return myAccountPage(user);
@@ -112,6 +114,11 @@ class LoginState extends State<LoginPage> {
             subtitle: Text(user.email),
           ),
           const Text('Signed in successfully.'),
+
+          const ElevatedButton(
+            onPressed: testsql,
+            child: Text('test sql'),
+          ),
 
           // SIGN OUT
           ElevatedButton(
