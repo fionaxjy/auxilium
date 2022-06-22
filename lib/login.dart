@@ -20,15 +20,13 @@ class LoginPage extends StatefulWidget {
 class LoginState extends State<LoginPage> {
   GoogleSignInAccount _currentUser;
 
-  // initState only runs when user is logged in
   // check if logged in user is the same
   @override
   void initState() {
     super.initState();
     _googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount account) {
-      print(account.id);
       setState(() {
-        _currentUser = account; // ERROR: THIS IS NOT RUNNING
+        _currentUser = account;
       });
     });
     _googleSignIn.signInSilently();
@@ -36,21 +34,16 @@ class LoginState extends State<LoginPage> {
 
   // sign-in method
   Future<void> _handleSignIn() async {
-    try {
-      await _googleSignIn.signIn();
-    } catch (error) {
-      print(error);
-    }
+    _currentUser = await _googleSignIn.signIn();
   }
 
   // sign-out method
   Future<void> _handleSignOut() {
     _googleSignIn.disconnect();
-    print('${_currentUser.id} is signed out');
   }
 
   Widget buildSignUp() {
-    final GoogleSignInAccount user = _currentUser;
+    GoogleSignInAccount user = _currentUser;
 
     if (user != null) {
       return myAccountPage(user);
@@ -108,7 +101,7 @@ class LoginState extends State<LoginPage> {
 
   Widget myAccountPage(GoogleSignInAccount user) {
     UserInfo addUser = UserInfo(user.id, user.displayName, null, null, null);
-
+    testsql(addUser);
     return Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
@@ -123,7 +116,7 @@ class LoginState extends State<LoginPage> {
 
           ElevatedButton(
             onPressed: () => testsql(addUser),
-            child: const Text('test sql'),
+            child: const Text('Test SQL'),
           ),
 
           // SIGN OUT

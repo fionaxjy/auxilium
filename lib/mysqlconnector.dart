@@ -17,6 +17,10 @@ class UserInfo {
     bankAccNo = inBankAccNo;
     bio = inBio;
   }
+
+  String toString() {
+    return "User $userID";
+  }
 }
 
 testsql(UserInfo addUser) async {
@@ -34,10 +38,9 @@ testsql(UserInfo addUser) async {
   print("Opened connection!");
 
   // await dropTables(conn);
-  // await createTables(conn); // should not be happening once database is finalised, but will leave for now
-
+  // await createTables(conn); // should not be happening once database is finalised
   await findUser(conn, addUser);
-  await readData(conn);
+  // await readData(conn);
   await conn.close();
   print('done');
 }

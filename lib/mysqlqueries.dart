@@ -108,10 +108,11 @@ Future<void> readData(MySqlConnection conn) async {
 }
 
 Future<void> findUser(MySqlConnection conn, UserInfo addUser) async {
-  print('Searching for user...');
-  StreamedResults results = await conn
-      .execute('SELECT UserID from PERSON where userID = ${addUser.userID}');
-  if (results == null) {
+  print('Searching for $addUser...');
+  Results results = await (await conn.execute(
+          'SELECT UserID from PERSON where UserID = ${addUser.userID}'))
+      .deStream();
+  if (results.isEmpty) {
     newUser(conn, addUser);
   } else {
     print('User already exists');
