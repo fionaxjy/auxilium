@@ -1,5 +1,7 @@
 import 'package:sqljocky5/sqljocky.dart';
 
+import 'mysqlconnector.dart';
+
 /// Drops the tables if they already exist
 Future<void> dropTables(MySqlConnection conn) async {
   print("Dropping tables ...");
@@ -19,7 +21,7 @@ Future<void> createTables(MySqlConnection conn) async {
   await conn.execute('CREATE TABLE PERSON ('
       'UserID				    VARCHAR(30)			NOT NULL, '
       'PersonName 	  	VARCHAR(30) 		NOT NULL, '
-      'MobileNo 			  VARCHAR(30) 		NOT NULL, '
+      'MobileNo 			  VARCHAR(30), '
       'BankAccNo 			  VARCHAR(17), '
       'Bio 			      	VARCHAR(150), '
       'PRIMARY KEY (UserID))');
@@ -84,11 +86,17 @@ Future<void> createTables(MySqlConnection conn) async {
   print("Created table!");
 }
 
-Future<void> newUser(MySqlConnection conn) async {
+Future<void> newUser(MySqlConnection conn, UserInfo addUser) async {
   print('Creating user...');
   await conn.prepared(
       'INSERT INTO PERSON (UserID, PersonName, MobileNo, BankAccNo, Bio) VALUES (?, ?, ?, ?, ?)',
-      ['dorothy', 'Dorothy Yuan', '92700483', '01234567890', 'Hello there!']);
+      [
+        addUser.userID,
+        addUser.personName,
+        addUser.mobileNo,
+        addUser.bankAccNo,
+        addUser.bio
+      ]);
   print('user created!');
 }
 
@@ -99,26 +107,13 @@ Future<void> readData(MySqlConnection conn) async {
   print(result.map((r) => r.byName('PersonName')));
 }
 
-testsql() async {
-  var s = ConnectionSettings(
-    user: "root",
-    password: "password",
-    host: "localhost",
-    port: 3306,
-    db: "Auxilium",
-  );
-
-  // create a connection
-  print("Opening connection ...");
-  var conn = await MySqlConnection.connect(s);
-  print("Opened connection!");
-
-  await dropTables(conn);
-  await createTables(conn);
-  await newUser(conn);
-  //await insertRows(conn);
-  await readData(conn);
-
-  await conn.close();
-  print('done');
+Future<void> findUser(MySqlConnection conn, UserInfo addUser) async {
+  print('Searching for user...');
+  StreamedResults results = await conn
+      .execute('SELECT UserID from PERSON where userID = ${addUser.userID}');
+  if (results == null) {
+    newUser(conn, addUser);
+  } else {
+    print('User already exists');
+  }
 }

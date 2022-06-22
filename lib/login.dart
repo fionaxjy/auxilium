@@ -1,9 +1,9 @@
+import 'package:auxilium/mysqlconnector.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:async';
 import 'package:google_sign_in/google_sign_in.dart';
-
-import 'mysqlqueries.dart';
+import 'mysqlconnector.dart';
 
 GoogleSignIn _googleSignIn = GoogleSignIn(
   scopes: <String>[
@@ -26,8 +26,9 @@ class LoginState extends State<LoginPage> {
   void initState() {
     super.initState();
     _googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount account) {
+      print(account.id);
       setState(() {
-        _currentUser = account;
+        _currentUser = account; // ERROR: THIS IS NOT RUNNING
       });
     });
     _googleSignIn.signInSilently();
@@ -43,7 +44,10 @@ class LoginState extends State<LoginPage> {
   }
 
   // sign-out method
-  Future<void> _handleSignOut() => _googleSignIn.disconnect();
+  Future<void> _handleSignOut() {
+    _googleSignIn.disconnect();
+    print('${_currentUser.id} is signed out');
+  }
 
   Widget buildSignUp() {
     final GoogleSignInAccount user = _currentUser;
@@ -103,6 +107,8 @@ class LoginState extends State<LoginPage> {
   }
 
   Widget myAccountPage(GoogleSignInAccount user) {
+    UserInfo addUser = UserInfo(user.id, user.displayName, null, null, null);
+
     return Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
@@ -115,9 +121,9 @@ class LoginState extends State<LoginPage> {
           ),
           const Text('Signed in successfully.'),
 
-          const ElevatedButton(
-            onPressed: testsql,
-            child: Text('test sql'),
+          ElevatedButton(
+            onPressed: () => testsql(addUser),
+            child: const Text('test sql'),
           ),
 
           // SIGN OUT
