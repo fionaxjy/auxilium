@@ -110,11 +110,26 @@ Future<void> readData(MySqlConnection conn) async {
 Future<void> findUser(MySqlConnection conn, UserInfo addUser) async {
   print('Searching for $addUser...');
   Results results = await (await conn.execute(
-          'SELECT UserID from PERSON where UserID = ${addUser.userID}'))
+          'SELECT UserID FROM PERSON WHERE UserID = ${addUser.userID}'))
       .deStream();
   if (results.isEmpty) {
     newUser(conn, addUser);
   } else {
     print('User already exists');
   }
+}
+
+Future<void> updateUser(MySqlConnection conn, UserInfo addUser) async {
+  await conn.execute(
+      'UPDATE PERSON SET PersonName = \'${addUser.personName}\' WHERE UserID = \'${addUser.userID}\' limit 1');
+  await conn.execute(
+      'UPDATE PERSON SET MobileNo = \'${addUser.mobileNo}\' WHERE UserID = \'${addUser.userID}\' limit 1');
+  await conn.execute(
+      'UPDATE PERSON SET BankAccNo = \'${addUser.bankAccNo}\' WHERE UserID = \'${addUser.userID}\' limit 1');
+  await conn.execute(
+      'UPDATE PERSON SET Bio = \'${addUser.bio}\' WHERE UserID = \'${addUser.userID}\' limit 1');
+  Results results = await (await conn
+          .execute('SELECT * FROM PERSON WHERE UserID = ${addUser.userID}'))
+      .deStream();
+  print(results);
 }

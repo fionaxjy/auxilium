@@ -5,12 +5,12 @@ import 'mysqlqueries.dart';
 class UserInfo {
   String userID;
   String personName;
-  int mobileNo;
-  int bankAccNo;
+  String mobileNo;
+  String bankAccNo;
   String bio;
 
-  UserInfo(String inUserID, String inPersonName, int inMobileNo,
-      int inBankAccNo, String inBio) {
+  UserInfo(String inUserID, String inPersonName, String inMobileNo,
+      String inBankAccNo, String inBio) {
     userID = inUserID;
     personName = inPersonName;
     mobileNo = inMobileNo;
@@ -18,6 +18,7 @@ class UserInfo {
     bio = inBio;
   }
 
+  @override
   String toString() {
     return "User $userID";
   }
@@ -38,9 +39,28 @@ testsql(UserInfo addUser) async {
   print("Opened connection!");
 
   // await dropTables(conn);
-  // await createTables(conn); // should not be happening once database is finalised
+  // await createTables(conn);
+  // should not be happening once database is finalised
   await findUser(conn, addUser);
-  // await readData(conn);
+  await conn.close();
+  print('done');
+}
+
+sqlUpdateUser(UserInfo addUser) async {
+  var s = ConnectionSettings(
+    user: "root",
+    password: "password",
+    host: "localhost",
+    port: 3306,
+    db: "Auxilium",
+  );
+
+  // create a connection
+  print("Opening connection ...");
+  var conn = await MySqlConnection.connect(s);
+  print("Opened connection!");
+
+  await updateUser(conn, addUser);
   await conn.close();
   print('done');
 }

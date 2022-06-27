@@ -1,9 +1,11 @@
 import 'package:auxilium/mysqlconnector.dart';
+import 'package:auxilium/user_input_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:async';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'mysqlconnector.dart';
+import 'user_input_screen.dart';
 
 GoogleSignIn _googleSignIn = GoogleSignIn(
   scopes: <String>[
@@ -38,15 +40,28 @@ class LoginState extends State<LoginPage> {
   }
 
   // sign-out method
-  Future<void> _handleSignOut() {
+  Future<void> _handleSignOut() async {
     _googleSignIn.disconnect();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: const Text('My Account'),
+        ),
+        body: ConstrainedBox(
+          constraints: const BoxConstraints.expand(),
+          child: buildSignUp(),
+        ));
   }
 
   Widget buildSignUp() {
     GoogleSignInAccount user = _currentUser;
 
     if (user != null) {
-      return myAccountPage(user);
+      UserInfo addUser = UserInfo(user.id, user.displayName, '', '', '');
+      return myAccountPage(user, addUser);
     } else {
       return Column(
         children: [
@@ -99,8 +114,7 @@ class LoginState extends State<LoginPage> {
         ));
   }
 
-  Widget myAccountPage(GoogleSignInAccount user) {
-    UserInfo addUser = UserInfo(user.id, user.displayName, null, null, null);
+  Widget myAccountPage(GoogleSignInAccount user, UserInfo addUser) {
     testsql(addUser);
     return Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -109,14 +123,18 @@ class LoginState extends State<LoginPage> {
             leading: GoogleUserCircleAvatar(
               identity: user,
             ),
-            title: Text(user.displayName ?? ''),
+            title: Text(addUser.personName ?? ''),
             subtitle: Text(user.email),
           ),
-          const Text('Signed in successfully.'),
-
           ElevatedButton(
-            onPressed: () => testsql(addUser),
-            child: const Text('Test SQL'),
+            child: const Text('Edit Profile'),
+            onPressed: () {
+              // Navigate to second route when tapped.
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => UserInput(addUser)),
+              );
+            },
           ),
 
           // SIGN OUT
@@ -125,17 +143,5 @@ class LoginState extends State<LoginPage> {
             child: const Text('SIGN OUT'),
           ),
         ]);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text('My Account'),
-        ),
-        body: ConstrainedBox(
-          constraints: const BoxConstraints.expand(),
-          child: buildSignUp(),
-        ));
   }
 }
