@@ -48,14 +48,10 @@ class LoginState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        bottomNavigationBar: buildNavBar(context),
-        appBar: AppBar(
-          title: const Text('My Account'),
-        ),
         body: ConstrainedBox(
-          constraints: const BoxConstraints.expand(),
-          child: buildSignUp(),
-        ));
+      constraints: const BoxConstraints.expand(),
+      child: buildSignUp(),
+    ));
   }
 
   Widget buildSignUp() {
@@ -118,32 +114,43 @@ class LoginState extends State<LoginPage> {
 
   Widget myAccountPage(GoogleSignInAccount user, UserInfo addUser) {
     testsql(addUser);
-    return Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: <Widget>[
-          ListTile(
-            leading: GoogleUserCircleAvatar(
-              identity: user,
-            ),
-            title: Text(addUser.personName ?? ''),
-            subtitle: Text(user.email),
-          ),
-          ElevatedButton(
-            child: const Text('Edit Profile'),
-            onPressed: () {
-              // Navigate to second route when tapped.
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => UserInput(addUser)),
-              );
-            },
-          ),
+    return Scaffold(
+        bottomNavigationBar: buildNavBar(context),
+        appBar: AppBar(
+          title:
+              const Text('My Account', style: TextStyle(color: Colors.black)),
+          backgroundColor: Colors.white,
+        ),
+        body: ConstrainedBox(
+          constraints: const BoxConstraints.expand(),
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                ListTile(
+                  leading: GoogleUserCircleAvatar(
+                    identity: user,
+                  ),
+                  title: Text(addUser.personName ?? ''),
+                  subtitle: Text(user.email),
+                ),
+                ElevatedButton(
+                  child: const Text('Edit Profile'),
+                  onPressed: () {
+                    // Navigate to second route when tapped.
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => UserInput(addUser)),
+                    );
+                  },
+                ),
 
-          // SIGN OUT
-          ElevatedButton(
-            onPressed: _handleSignOut,
-            child: const Text('SIGN OUT'),
-          ),
-        ]);
+                // SIGN OUT
+                ElevatedButton(
+                  onPressed: _handleSignOut,
+                  child: const Text('SIGN OUT'),
+                ),
+              ]),
+        ));
   }
 }
