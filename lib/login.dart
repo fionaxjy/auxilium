@@ -1,4 +1,5 @@
 import 'package:auxilium/mysqlconnector.dart';
+import 'package:auxilium/navbar.dart';
 import 'package:auxilium/user_input_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -47,6 +48,7 @@ class LoginState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        bottomNavigationBar: buildNavBar(context),
         appBar: AppBar(
           title: const Text('My Account'),
         ),

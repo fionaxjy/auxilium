@@ -12,6 +12,36 @@ class UserInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home_outlined, color: Colors.black),
+            backgroundColor: Colors.white,
+            label: '',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.volunteer_activism_outlined, color: Colors.black),
+            backgroundColor: Colors.white,
+            label: '',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.add_circle_outline, color: Colors.black),
+            backgroundColor: Colors.white,
+            label: '',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.notifications_outlined, color: Colors.black),
+            backgroundColor: Colors.white,
+            label: '',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.account_circle_outlined, color: Colors.black),
+            backgroundColor: Colors.white,
+            label: '',
+          )
+        ],
+      ),
       appBar: AppBar(
         title: const Text('Enter User Information'),
       ),
