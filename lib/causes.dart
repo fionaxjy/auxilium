@@ -3,97 +3,67 @@ import 'package:flutter/material.dart';
 import 'navbar.dart';
 
 class CausesPage extends StatelessWidget {
-  const CausesPage({Key key}) : super(key: key);
+  CausesPage({Key key}) : super(key: key);
+
+  final List<Cause> causeList = [
+    Cause(Icon(Icons.fastfood), 'Food', 1234),
+    Cause(Icon(Icons.local_hospital), 'Healthcare', 2345),
+    Cause(Icon(Icons.house), 'Housing/Space', 4567),
+    Cause(Icon(Icons.handyman), 'Tools/Utilities', 4567),
+    Cause(Icon(Icons.checkroom), 'Clothes', 123),
+    Cause(Icon(Icons.school), 'Education', 3456),
+    Cause(Icon(Icons.more_horiz), 'Others', 45678)
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromARGB(255, 168, 159, 104),
       appBar: AppBar(
-        title: Text('Causes', style: TextStyle(color: Colors.black)),
-        backgroundColor: Colors.white,
-      ),
-      body: Container(
-        alignment: Alignment.center,
-        padding: EdgeInsets.symmetric(horizontal: 2.0, vertical: 1.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            SizedBox(
-                height: 80.0,
-                width: 330.0,
-                child: TextButton(
-                  style: TextButton.styleFrom(
-                      backgroundColor: Colors.amber,
-                      primary: Colors.white,
-                      textStyle: TextStyle(fontSize: 30.0)),
-                  onPressed: () {},
-                  child: Text('Food'),
-                )),
-            SizedBox(
-                height: 80.0,
-                width: 330.0,
-                child: TextButton(
-                  style: TextButton.styleFrom(
-                    backgroundColor: Colors.amber,
-                    primary: Colors.white,
-                    textStyle: TextStyle(fontSize: 30.0),
-                  ),
-                  onPressed: () {},
-                  child: Text('Healthcare'),
-                )),
-            SizedBox(
-                height: 80.0,
-                width: 330.0,
-                child: TextButton(
-                  style: TextButton.styleFrom(
-                    backgroundColor: Colors.amber,
-                    primary: Colors.white,
-                    textStyle: TextStyle(fontSize: 30.0),
-                  ),
-                  onPressed: () {},
-                  child: Text('Resources'),
-                )),
-            SizedBox(
-                height: 80.0,
-                width: 330.0,
-                child: TextButton(
-                  style: TextButton.styleFrom(
-                    backgroundColor: Colors.amber,
-                    primary: Colors.white,
-                    textStyle: TextStyle(fontSize: 30.0),
-                  ),
-                  onPressed: () {},
-                  child: Text('Housing'),
-                )),
-            SizedBox(
-                height: 80.0,
-                width: 330.0,
-                child: TextButton(
-                  style: TextButton.styleFrom(
-                    backgroundColor: Colors.amber,
-                    primary: Colors.white,
-                    textStyle: TextStyle(fontSize: 30.0),
-                  ),
-                  onPressed: () {},
-                  child: Text('Education'),
-                )),
-            SizedBox(
-                height: 80.0,
-                width: 330.0,
-                child: TextButton(
-                  style: TextButton.styleFrom(
-                    backgroundColor: Colors.amber,
-                    primary: Colors.white,
-                    textStyle: TextStyle(fontSize: 30.0),
-                  ),
-                  onPressed: () {},
-                  child: Text('Others'),
-                )),
-          ],
-        ),
+          elevation: 0,
+          centerTitle: true,
+          title: const Text('causes',
+              style: TextStyle(
+                  color: Color.fromARGB(255, 65, 82, 31), fontSize: 28)),
+          backgroundColor: const Color.fromARGB(255, 245, 253, 198),
+          leading: homeButton()),
+      body: ListView.builder(
+        padding: EdgeInsets.fromLTRB(5, 20, 5, 0),
+        itemCount: causeList.length,
+        itemBuilder: (context, index) {
+          return Card(
+            child: ListTile(
+              onTap: () {},
+              leading: causeList[index].icons,
+              title: Text(
+                causeList[index].category,
+                style: TextStyle(fontSize: 20),
+              ),
+              subtitle: Text(
+                "${causeList[index].numPost} Posts",
+                style: TextStyle(fontSize: 12),
+              ),
+            ),
+          );
+        },
       ),
       bottomNavigationBar: buildNavBar(context),
     );
+  }
+}
+
+Widget homeButton() {
+  return IconButton(icon: Image.asset('assets/logo.png'), onPressed: () {});
+}
+
+class Cause {
+  final Widget icons;
+  final String category;
+  final int numPost;
+  const Cause(this.icons, this.category, this.numPost);
+
+  @override
+  String toString() {
+    return "Cause $category with $numPost Posts";
   }
 }

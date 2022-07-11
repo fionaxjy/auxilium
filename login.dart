@@ -1,8 +1,8 @@
+import 'package:auxilium/navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:async';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'my_account.dart';
 
 GoogleSignIn _googleSignIn = GoogleSignIn(
   scopes: <String>[
@@ -36,6 +36,11 @@ class LoginState extends State<LoginPage> {
     _currentUser = await _googleSignIn.signIn();
   }
 
+  // sign-out method
+  Future<void> _handleSignOut() async {
+    _googleSignIn.disconnect();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,10 +52,9 @@ class LoginState extends State<LoginPage> {
 
   Widget buildSignUp() {
     GoogleSignInAccount user = _currentUser;
-    print(user);
 
     if (user != null) {
-      return MyAccountPage(user, _googleSignIn);
+      return myAccountPage(user);
     } else {
       return signInPage();
     }
@@ -113,7 +117,7 @@ class LoginState extends State<LoginPage> {
           ),
           icon: const FaIcon(
             FontAwesomeIcons.google,
-            color: Color.fromARGB(255, 167, 159, 111),
+            color: Color.fromARGB(255, 208, 177, 122),
           ),
           label: const Text(
             '  Sign In',
@@ -125,6 +129,36 @@ class LoginState extends State<LoginPage> {
           ),
           // SIGN IN
           onPressed: _handleSignIn,
+        ));
+  }
+
+  Widget myAccountPage(GoogleSignInAccount user) {
+    return Scaffold(
+        bottomNavigationBar: buildNavBar(context),
+        appBar: AppBar(
+          title:
+              const Text('My Account', style: TextStyle(color: Colors.black)),
+          backgroundColor: Colors.white,
+        ),
+        body: ConstrainedBox(
+          constraints: const BoxConstraints.expand(),
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                ListTile(
+                  leading: GoogleUserCircleAvatar(
+                    identity: user,
+                  ),
+                  title: Text(user.displayName ?? ''),
+                  subtitle: Text(user.email),
+                ),
+
+                // SIGN OUT
+                ElevatedButton(
+                  onPressed: _handleSignOut,
+                  child: const Text('SIGN OUT'),
+                ),
+              ]),
         ));
   }
 }

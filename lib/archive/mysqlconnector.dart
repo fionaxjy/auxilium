@@ -1,4 +1,4 @@
-import 'package:sqljocky5/sqljocky.dart';
+/*import 'package:sqljocky5/sqljocky.dart';
 import 'mysqlqueries.dart';
 /*UserID, PersonName, MobileNo, BankAccNo, Bio*/
 
@@ -64,3 +64,4 @@ sqlUpdateUser(UserInfo addUser) async {
   await conn.close();
   print('done');
 }
+*/

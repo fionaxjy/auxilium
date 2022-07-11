@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'mysqlconnector.dart';
+/*import 'package:flutter/material.dart';
+import 'archive/mysqlconnector.dart';
 
 class UserInput extends StatelessWidget {
   UserInfo user;
@@ -151,3 +151,4 @@ class UserInput extends StatelessWidget {
     );
   }
 }
+*/

@@ -44,3 +44,16 @@ dev_dependencies:
 flutter:
 
   uses-material-design: true
+
+  assets:
+    - assets/img_vines.png
+    - assets/logo.png
+
+  fonts:
+    - family: AltonaSans
+      fonts:
+        - asset: assets/AltonaSans-Regular.ttf
+        - asset: assets/AltonaSans-Italic.ttf
+    
+
+
