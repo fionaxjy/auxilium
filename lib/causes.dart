@@ -1,10 +1,11 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'navbar.dart';
 
 class CausesPage extends StatelessWidget {
-  CausesPage({Key key}) : super(key: key);
-
+  final GoogleSignInAccount user;
+  final GoogleSignIn googleSignIn;
   final List<Cause> causeList = [
     Cause(Icon(Icons.fastfood), 'Food', 1234),
     Cause(Icon(Icons.local_hospital), 'Healthcare', 2345),
@@ -14,6 +15,8 @@ class CausesPage extends StatelessWidget {
     Cause(Icon(Icons.school), 'Education', 3456),
     Cause(Icon(Icons.more_horiz), 'Others', 45678)
   ];
+
+  CausesPage(this.user, this.googleSignIn, {Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +50,7 @@ class CausesPage extends StatelessWidget {
           );
         },
       ),
-      bottomNavigationBar: buildNavBar(context),
+      bottomNavigationBar: buildNavBar(context, user, googleSignIn),
     );
   }
 }

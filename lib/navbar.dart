@@ -1,8 +1,10 @@
 import 'package:auxilium/causes.dart';
-import 'package:auxilium/login.dart';
+import 'package:auxilium/my_account.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
-Widget buildNavBar(BuildContext context) {
+Widget buildNavBar(
+    BuildContext context, GoogleSignInAccount user, GoogleSignIn googleSignIn) {
   return BottomNavigationBar(
     backgroundColor: const Color.fromARGB(255, 245, 253, 198),
     type: BottomNavigationBarType.fixed,
@@ -16,8 +18,8 @@ Widget buildNavBar(BuildContext context) {
             icon: const Icon(Icons.volunteer_activism_outlined),
             color: const Color.fromARGB(255, 65, 82, 31),
             onPressed: () {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => CausesPage()));
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => CausesPage(user, googleSignIn)));
             }),
         label: '',
       ),
@@ -36,8 +38,8 @@ Widget buildNavBar(BuildContext context) {
             icon: const Icon(Icons.account_circle_outlined),
             color: const Color.fromARGB(255, 65, 82, 31),
             onPressed: () {
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const LoginPage()));
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => MyAccountPage(user, googleSignIn)));
             }),
         label: '',
       )

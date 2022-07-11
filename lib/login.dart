@@ -47,7 +47,6 @@ class LoginState extends State<LoginPage> {
 
   Widget buildSignUp() {
     GoogleSignInAccount user = _currentUser;
-    print(user);
 
     if (user != null) {
       return MyAccountPage(user, _googleSignIn);

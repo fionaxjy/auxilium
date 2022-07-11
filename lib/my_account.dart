@@ -1,17 +1,14 @@
+import 'package:auxilium/login.dart';
 import 'package:auxilium/navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class MyAccountPage extends StatefulWidget {
-  GoogleSignInAccount user;
-  GoogleSignIn googleSignIn;
+  final GoogleSignInAccount user;
+  final GoogleSignIn googleSignIn;
 
-  MyAccountPage(GoogleSignInAccount myUser, GoogleSignIn myGoogleSignIn,
-      {Key key})
-      : super(key: key) {
-    user = myUser;
-    googleSignIn = myGoogleSignIn;
-  }
+  const MyAccountPage(this.user, this.googleSignIn, {Key key})
+      : super(key: key);
 
   @override
   MyAccountPageState createState() => MyAccountPageState();
@@ -32,7 +29,8 @@ class MyAccountPageState extends State<MyAccountPage> {
 
     return Scaffold(
         backgroundColor: const Color.fromARGB(255, 167, 159, 111),
-        bottomNavigationBar: buildNavBar(context),
+        bottomNavigationBar:
+            buildNavBar(context, widget.user, widget.googleSignIn),
         appBar: AppBar(
           elevation: 0,
           centerTitle: true,
@@ -195,7 +193,7 @@ class MyAccountPageState extends State<MyAccountPage> {
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
-              children: [
+              children: const [
                 Padding(
                   padding: EdgeInsets.only(top: 80, left: 20),
                 ),
@@ -231,6 +229,7 @@ signOutAlert(BuildContext context, GoogleSignIn googleSignIn) {
       onPressed: () async {
         googleSignIn.disconnect();
         Navigator.of(context).pop();
+        const LoginPage();
       });
   Widget cancelButton = IconButton(
       icon: const Icon(Icons.cancel),

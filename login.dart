@@ -1,4 +1,4 @@
-import 'package:auxilium/navbar.dart';
+import 'package:auxilium/my_account.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:async';
@@ -36,11 +36,6 @@ class LoginState extends State<LoginPage> {
     _currentUser = await _googleSignIn.signIn();
   }
 
-  // sign-out method
-  Future<void> _handleSignOut() async {
-    _googleSignIn.disconnect();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,7 +49,7 @@ class LoginState extends State<LoginPage> {
     GoogleSignInAccount user = _currentUser;
 
     if (user != null) {
-      return myAccountPage(user);
+      return MyAccountPage(user, _googleSignIn);
     } else {
       return signInPage();
     }
@@ -129,36 +124,6 @@ class LoginState extends State<LoginPage> {
           ),
           // SIGN IN
           onPressed: _handleSignIn,
-        ));
-  }
-
-  Widget myAccountPage(GoogleSignInAccount user) {
-    return Scaffold(
-        bottomNavigationBar: buildNavBar(context),
-        appBar: AppBar(
-          title:
-              const Text('My Account', style: TextStyle(color: Colors.black)),
-          backgroundColor: Colors.white,
-        ),
-        body: ConstrainedBox(
-          constraints: const BoxConstraints.expand(),
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                ListTile(
-                  leading: GoogleUserCircleAvatar(
-                    identity: user,
-                  ),
-                  title: Text(user.displayName ?? ''),
-                  subtitle: Text(user.email),
-                ),
-
-                // SIGN OUT
-                ElevatedButton(
-                  onPressed: _handleSignOut,
-                  child: const Text('SIGN OUT'),
-                ),
-              ]),
         ));
   }
 }
