@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'navbar.dart';
@@ -6,7 +5,7 @@ import 'navbar.dart';
 class CausesPage extends StatelessWidget {
   final GoogleSignInAccount user;
   final GoogleSignIn googleSignIn;
-  final List<Cause> causeList = [
+  final List<Cause> causeList = const [
     Cause(Icon(Icons.fastfood), 'Food', 1234),
     Cause(Icon(Icons.local_hospital), 'Healthcare', 2345),
     Cause(Icon(Icons.house), 'Housing/Space', 4567),
@@ -16,12 +15,12 @@ class CausesPage extends StatelessWidget {
     Cause(Icon(Icons.more_horiz), 'Others', 45678)
   ];
 
-  CausesPage(this.user, this.googleSignIn, {Key key}) : super(key: key);
+  const CausesPage(this.user, this.googleSignIn, {Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 168, 159, 104),
+      backgroundColor: const Color.fromARGB(255, 168, 159, 104),
       appBar: AppBar(
           elevation: 0,
           centerTitle: true,
@@ -31,7 +30,7 @@ class CausesPage extends StatelessWidget {
           backgroundColor: const Color.fromARGB(255, 245, 253, 198),
           leading: homeButton()),
       body: ListView.builder(
-        padding: EdgeInsets.fromLTRB(5, 20, 5, 0),
+        padding: const EdgeInsets.fromLTRB(5, 20, 5, 0),
         itemCount: causeList.length,
         itemBuilder: (context, index) {
           return Card(
@@ -44,7 +43,7 @@ class CausesPage extends StatelessWidget {
               ),
               subtitle: Text(
                 "${causeList[index].numPost} Posts",
-                style: TextStyle(fontSize: 12),
+                style: const TextStyle(fontSize: 12),
               ),
             ),
           );
