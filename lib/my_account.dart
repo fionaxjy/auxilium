@@ -2,6 +2,7 @@ import 'package:auxilium/login.dart';
 import 'package:auxilium/navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'home_button.dart';
 
 class MyAccountPage extends StatefulWidget {
   final GoogleSignInAccount user;
@@ -62,6 +63,7 @@ class MyAccountPageState extends State<MyAccountPage> {
               identity: user,
             ),*/
                   CircleAvatar(
+                    foregroundImage: NetworkImage(widget.user.photoUrl),
                     backgroundColor: const Color.fromARGB(255, 65, 82, 31),
                     radius: 36,
                     child: Text(getInitials(widget.user.displayName),
@@ -180,11 +182,11 @@ class MyAccountPageState extends State<MyAccountPage> {
               )
             ]),
           ),
-          postViewer()
+          //postViewer()
         ]));
   }
 
-  Widget postViewer() {
+  /*Widget postViewer() {
     var size = MediaQuery.of(context).size;
     return SingleChildScrollView(
       child: Padding(
@@ -193,11 +195,15 @@ class MyAccountPageState extends State<MyAccountPage> {
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
-              children: const [
-                Padding(
+              children: [
+                const Padding(
                   padding: EdgeInsets.only(top: 80, left: 20),
                 ),
-                Text('data')
+                Card(
+                  child: ListTile(
+                    leading: Text(widget.user.displayName ?? ''),
+                  ),
+                ),
               ],
             )
           ],
@@ -205,45 +211,42 @@ class MyAccountPageState extends State<MyAccountPage> {
       ),
     );
   }
-}
+}*/
 
-Widget homeButton() {
-  return IconButton(icon: Image.asset('assets/logo.png'), onPressed: () {});
-}
+  Widget signOutButton(BuildContext context, GoogleSignIn googleSignIn) {
+    return IconButton(
+        icon: const Icon(
+          Icons.logout,
+          size: 28,
+        ),
+        color: const Color.fromARGB(255, 65, 82, 31),
+        onPressed: () {
+          signOutAlert(context, googleSignIn);
+        });
+  }
 
-Widget signOutButton(BuildContext context, GoogleSignIn googleSignIn) {
-  return IconButton(
-      icon: const Icon(
-        Icons.logout,
-        size: 28,
-      ),
-      color: const Color.fromARGB(255, 65, 82, 31),
-      onPressed: () {
-        signOutAlert(context, googleSignIn);
-      });
-}
-
-signOutAlert(BuildContext context, GoogleSignIn googleSignIn) {
-  Widget confirmButton = IconButton(
-      icon: const Icon(Icons.check),
-      onPressed: () async {
-        googleSignIn.disconnect();
-        Navigator.of(context).pop();
-        const LoginPage();
-      });
-  Widget cancelButton = IconButton(
-      icon: const Icon(Icons.cancel),
-      onPressed: () {
-        Navigator.of(context).pop();
-      });
-  AlertDialog signOutAlert = AlertDialog(
-    content: const Text('Confirm Sign Out?'),
-    actions: [confirmButton, cancelButton],
-  );
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return signOutAlert;
-    },
-  );
+  signOutAlert(BuildContext context, GoogleSignIn googleSignIn) {
+    Widget confirmButton = IconButton(
+        icon: const Icon(Icons.check),
+        onPressed: () async {
+          googleSignIn.disconnect();
+          const LoginPage();
+          Navigator.of(context).pop();
+        });
+    Widget cancelButton = IconButton(
+        icon: const Icon(Icons.cancel),
+        onPressed: () {
+          Navigator.of(context).pop();
+        });
+    AlertDialog signOutAlert = AlertDialog(
+      content: const Text('Confirm Sign Out?'),
+      actions: [confirmButton, cancelButton],
+    );
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return signOutAlert;
+      },
+    );
+  }
 }

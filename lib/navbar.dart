@@ -1,5 +1,6 @@
 import 'package:auxilium/causes.dart';
 import 'package:auxilium/my_account.dart';
+import 'package:auxilium/notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -28,9 +29,14 @@ Widget buildNavBar(
             color: Color.fromARGB(255, 65, 82, 31)),
         label: '',
       ),
-      const BottomNavigationBarItem(
-        icon: Icon(Icons.notifications_outlined,
-            color: Color.fromARGB(255, 65, 82, 31)),
+      BottomNavigationBarItem(
+        icon: IconButton(
+            icon: const Icon(Icons.notifications_active_outlined),
+            color: const Color.fromARGB(255, 65, 82, 31),
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => NotificationsPage(user, googleSignIn)));
+            }),
         label: '',
       ),
       BottomNavigationBarItem(
