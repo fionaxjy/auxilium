@@ -29,20 +29,161 @@ class MyAccountPageState extends State<MyAccountPage> {
     }
 
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 167, 159, 111),
-      bottomNavigationBar:
-          buildNavBar(context, widget.user, widget.googleSignIn),
-      appBar: AppBar(
-        elevation: 0,
-        centerTitle: true,
-        title: const Text('my account',
-            style: TextStyle(
-                color: Color.fromARGB(255, 65, 82, 31), fontSize: 28)),
-        backgroundColor: const Color.fromARGB(255, 245, 253, 198),
-        leading: homeButton(context, widget.user, widget.googleSignIn),
-        actions: [signOutButton(context, widget.googleSignIn)],
-      ),
-    );
+        backgroundColor: const Color.fromARGB(255, 167, 159, 111),
+        bottomNavigationBar:
+            buildNavBar(context, widget.user, widget.googleSignIn),
+        appBar: AppBar(
+          elevation: 0,
+          centerTitle: true,
+          title: const Text('my account',
+              style: TextStyle(
+                  color: Color.fromARGB(255, 65, 82, 31), fontSize: 28)),
+          backgroundColor: const Color.fromARGB(255, 245, 253, 198),
+          leading: homeButton(context, widget.user, widget.googleSignIn),
+          actions: [signOutButton(context, widget.googleSignIn)],
+        ),
+        body: Column(children: [
+          Container(
+            decoration: BoxDecoration(
+              color: const Color.fromARGB(255, 245, 253, 198),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  spreadRadius: 5,
+                  blurRadius: 7,
+                  offset: const Offset(0, 3), // changes position of shadow
+                ),
+              ],
+            ),
+            child: Wrap(children: [
+              Column(
+                children: <Widget>[
+                  const SizedBox(height: 22),
+                  /*GoogleUserCircleAvatar(
+              identity: user,
+            ),*/
+                  CircleAvatar(
+                    foregroundImage: NetworkImage(widget.user.photoUrl),
+                    backgroundColor: const Color.fromARGB(255, 65, 82, 31),
+                    radius: 36,
+                    child: Text(getInitials(widget.user.displayName),
+                        style: const TextStyle(
+                            color: Color.fromARGB(255, 245, 195, 150),
+                            fontSize: 18)),
+                  ),
+                  const SizedBox(height: 16),
+
+                  // name
+                  Text(widget.user.displayName ?? '',
+                      style: const TextStyle(
+                        color: Color.fromARGB(255, 65, 82, 31),
+                        fontSize: 18,
+                      ),
+                      textAlign: TextAlign.center),
+                  // PLACEHOLDER TEXT FOR BIO INPUT
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  const SizedBox(
+                    width: 300,
+                    child: Text(
+                        'Software Engineer  | Mother of 5 | Life, Laugh, Love',
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 65, 82, 31),
+                          fontSize: 12,
+                        ),
+                        textAlign: TextAlign.center),
+                  ),
+                  const SizedBox(height: 26),
+
+                  // menu buttons
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      // REQUESTS
+                      TextButton(
+                          style: TextButton.styleFrom(
+                            minimumSize: Size.zero,
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              isRequests = true;
+                              isGiving = false;
+                              isBookmarks = false;
+                            });
+                          },
+                          child: Text(
+                            'requests',
+                            style: isRequests
+                                ? const TextStyle(
+                                    color: Color.fromARGB(255, 65, 82, 31),
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600)
+                                : const TextStyle(
+                                    color: Color.fromARGB(255, 245, 195, 150),
+                                    fontSize: 16),
+                          )),
+
+                      //GIVING
+                      TextButton(
+                        style: TextButton.styleFrom(
+                          minimumSize: Size.zero,
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            isRequests = false;
+                            isGiving = true;
+                            isBookmarks = false;
+                          });
+                        },
+                        child: Text('giving',
+                            style: isGiving
+                                ? const TextStyle(
+                                    color: Color.fromARGB(255, 65, 82, 31),
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                  )
+                                : const TextStyle(
+                                    color: Color.fromARGB(255, 245, 195, 150),
+                                    fontSize: 16)),
+                      ),
+
+                      //BOOKMARKS
+                      TextButton(
+                        style: TextButton.styleFrom(
+                          minimumSize: Size.zero,
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            isRequests = false;
+                            isGiving = false;
+                            isBookmarks = true;
+                          });
+                        },
+                        child: Text('bookmarks',
+                            style: isBookmarks
+                                ? const TextStyle(
+                                    color: Color.fromARGB(255, 65, 82, 31),
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600)
+                                : const TextStyle(
+                                    color: Color.fromARGB(255, 245, 195, 150),
+                                    fontSize: 16)),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 6,
+                  )
+                ],
+              )
+            ]),
+          ),
+          //postViewer()
+        ]));
   }
 
   /*Widget postViewer() {
