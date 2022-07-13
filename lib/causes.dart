@@ -29,7 +29,7 @@ class CausesPage extends StatelessWidget {
               style: TextStyle(
                   color: Color.fromARGB(255, 65, 82, 31), fontSize: 28)),
           backgroundColor: const Color.fromARGB(255, 245, 253, 198),
-          leading: homeButton()),
+          leading: homeButton(context, user, googleSignIn)),
       body: ListView.builder(
         padding: const EdgeInsets.fromLTRB(5, 20, 5, 0),
         itemCount: causeList.length,

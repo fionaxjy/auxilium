@@ -1,4 +1,6 @@
 import 'package:auxilium/causes.dart';
+import 'package:auxilium/community.dart';
+import 'package:auxilium/create_post.dart';
 import 'package:auxilium/my_account.dart';
 import 'package:auxilium/notifications.dart';
 import 'package:flutter/material.dart';
@@ -10,8 +12,14 @@ Widget buildNavBar(
     backgroundColor: const Color.fromARGB(255, 245, 253, 198),
     type: BottomNavigationBarType.fixed,
     items: <BottomNavigationBarItem>[
-      const BottomNavigationBarItem(
-        icon: Icon(Icons.home_outlined, color: Color.fromARGB(255, 65, 82, 31)),
+      BottomNavigationBarItem(
+        icon: IconButton(
+            icon: const Icon(Icons.home_outlined),
+            color: const Color.fromARGB(255, 65, 82, 31),
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => CommunityPage(user, googleSignIn)));
+            }),
         label: '',
       ),
       BottomNavigationBarItem(
@@ -24,9 +32,14 @@ Widget buildNavBar(
             }),
         label: '',
       ),
-      const BottomNavigationBarItem(
-        icon: Icon(Icons.add_circle_outline,
-            color: Color.fromARGB(255, 65, 82, 31)),
+      BottomNavigationBarItem(
+        icon: IconButton(
+            icon: const Icon(Icons.add_circle_outline),
+            color: const Color.fromARGB(255, 65, 82, 31),
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => CreatePage(user, googleSignIn)));
+            }),
         label: '',
       ),
       BottomNavigationBarItem(
