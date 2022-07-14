@@ -1,6 +1,5 @@
 import 'package:auxilium/causes.dart';
 import 'package:auxilium/community.dart';
-import 'package:auxilium/create_post.dart';
 import 'package:auxilium/my_account.dart';
 import 'package:auxilium/notifications.dart';
 import 'package:flutter/material.dart';
@@ -38,7 +37,7 @@ Widget buildNavBar(
             color: const Color.fromARGB(255, 65, 82, 31),
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => CreatePage(user, googleSignIn)));
+                  builder: (context) => NotificationsPage(user, googleSignIn)));
             }),
         label: '',
       ),

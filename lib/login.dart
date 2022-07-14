@@ -49,7 +49,6 @@ class LoginState extends State<LoginPage> {
     GoogleSignInAccount user = _currentUser;
 
     if (user != null) {
-      print(user.id);
       return MyAccountPage(user, _googleSignIn);
     } else {
       return signInPage();

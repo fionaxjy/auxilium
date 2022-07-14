@@ -7,7 +7,10 @@ void main() {
       title: 'Auxilium',
       theme: ThemeData(
           fontFamily: 'AltonaSans',
-          scaffoldBackgroundColor: const Color.fromARGB(255, 65, 82, 31)),
+          colorScheme: ThemeData()
+              .colorScheme
+              .copyWith(primary: const Color.fromARGB(255, 65, 82, 31)),
+          scaffoldBackgroundColor: Colors.white),
       home: const LoginPage(),
     ),
   );

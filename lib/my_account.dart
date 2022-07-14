@@ -1,3 +1,4 @@
+import 'package:auxilium/edit_user.dart';
 import 'package:auxilium/login.dart';
 import 'package:auxilium/navbar.dart';
 import 'package:flutter/material.dart';
@@ -58,20 +59,60 @@ class MyAccountPageState extends State<MyAccountPage> {
             child: Wrap(children: [
               Column(
                 children: <Widget>[
-                  const SizedBox(height: 22),
+                  const SizedBox(height: 20),
                   /*GoogleUserCircleAvatar(
               identity: user,
             ),*/
-                  CircleAvatar(
-                    foregroundImage: NetworkImage(widget.user.photoUrl),
-                    backgroundColor: const Color.fromARGB(255, 65, 82, 31),
-                    radius: 36,
-                    child: Text(getInitials(widget.user.displayName),
-                        style: const TextStyle(
-                            color: Color.fromARGB(255, 245, 195, 150),
-                            fontSize: 18)),
+
+                  Stack(
+                    alignment: const FractionalOffset(1.2, 1.22),
+                    children: <Widget>[
+                      Container(
+                        child: InkWell(
+                          onTap: () => {},
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(100),
+                            child: CircleAvatar(
+                              foregroundImage:
+                                  NetworkImage(widget.user.photoUrl),
+                              backgroundColor:
+                                  const Color.fromARGB(255, 65, 82, 31),
+                              radius: 36,
+                              child: Text(getInitials(widget.user.displayName),
+                                  style: const TextStyle(
+                                      color: Color.fromARGB(255, 245, 195, 150),
+                                      fontSize: 18)),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        height: 30,
+                        width: 30,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.white,
+                        ),
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: IconButton(
+                            icon: const Icon(
+                              Icons.edit,
+                              size: 16,
+                              color: Color.fromARGB(255, 65, 82, 31),
+                            ),
+                            onPressed: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => EditUser(
+                                      widget.user, widget.googleSignIn)));
+                            },
+                          ),
+                        ),
+                      )
+                    ],
                   ),
-                  const SizedBox(height: 16),
+
+                  const SizedBox(height: 20),
 
                   // name
                   Text(widget.user.displayName ?? '',
