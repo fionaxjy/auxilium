@@ -80,8 +80,9 @@ class MyAccountPageState extends State<MyAccountPage> {
                               radius: 36,
                               child: Text(getInitials(widget.user.displayName),
                                   style: const TextStyle(
-                                      color: Color.fromARGB(255, 245, 195, 150),
-                                      fontSize: 18)),
+                                    color: Color.fromARGB(255, 245, 195, 150),
+                                    fontSize: 18,
+                                  )),
                             ),
                           ),
                         ),
