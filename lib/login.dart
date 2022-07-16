@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:async';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'create_user.dart';
 import 'my_account.dart';
 
 GoogleSignIn _googleSignIn = GoogleSignIn(
@@ -49,7 +50,10 @@ class LoginState extends State<LoginPage> {
     GoogleSignInAccount user = _currentUser;
 
     if (user != null) {
-      return MyAccountPage(user, _googleSignIn);
+      /* if (!user.HasData) {
+        return CreateUser(user, _googleSignIn);
+      }*/
+      return CreateUser(user, _googleSignIn);
     } else {
       return signInPage();
     }
