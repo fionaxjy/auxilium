@@ -12,42 +12,64 @@ class CreatePost extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Widget postButton() {
+      return TextButton(
+          onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => CommunityPage(user, googleSignIn)));
+          },
+          child: const Padding(
+              padding: EdgeInsets.only(right: 8),
+              child: Text(
+                'share',
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Color.fromARGB(255, 65, 82, 31)),
+              )));
+    }
+
+    GlobalKey navBarGlobalKey = GlobalKey(debugLabel: 'bottomAppBar');
+
     return Scaffold(
+        key: navBarGlobalKey,
         backgroundColor: const Color.fromARGB(255, 168, 159, 104),
         appBar: AppBar(
-            elevation: 0,
-            centerTitle: true,
-            title: const Text('new post',
-                style: TextStyle(
-                    color: Color.fromARGB(255, 65, 82, 31), fontSize: 28)),
-            backgroundColor: const Color.fromARGB(255, 245, 253, 198),
-            leading: homeButton(context, user, googleSignIn)),
+          elevation: 0,
+          centerTitle: true,
+          title: const Text('new post',
+              style: TextStyle(
+                  color: Color.fromARGB(255, 65, 82, 31), fontSize: 28)),
+          backgroundColor: const Color.fromARGB(255, 245, 253, 198),
+          leading: homeButton(context, user, googleSignIn),
+          actions: [postButton()],
+        ),
         bottomNavigationBar: buildNavBar(context, user, googleSignIn),
-        body: Padding(
-            padding: const EdgeInsets.fromLTRB(25, 10, 25, 0),
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  TextFormField(
-                    maxLength: 30,
-                    onChanged: (content) {},
-                    decoration: const InputDecoration(
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Color.fromARGB(255, 65, 82, 31)),
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Color.fromARGB(255, 65, 82, 31)),
-                        ),
-                        filled: true,
-                        fillColor: Colors.white,
-                        labelText: 'My Post',
-                        hintText: 'Hey community!',
-                        labelStyle:
-                            TextStyle(color: Color.fromARGB(255, 65, 82, 31))),
-                  ),
-                ])));
+        body: Column(children: <Widget>[
+          TextFormField(
+            style: const TextStyle(fontSize: 20),
+            maxLength: 1000,
+            autofocus: true,
+            onChanged: (content) {},
+            textAlignVertical: TextAlignVertical.top,
+            decoration: const InputDecoration(
+                counterText: '',
+                contentPadding: EdgeInsets.fromLTRB(25, 25, 25, 540),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Color.fromARGB(255, 14, 20, 3)),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide:
+                      BorderSide(color: Color.fromARGB(255, 65, 82, 31)),
+                ),
+                filled: true,
+                fillColor: Colors.white,
+                labelText: 'My Post',
+                alignLabelWithHint: true,
+                hintText: 'Hey community!',
+                hintStyle: TextStyle(fontSize: 20)),
+          ),
+        ]));
   }
 
   deleteChangesAlert(BuildContext context) {
