@@ -32,44 +32,48 @@ class CreatePost extends StatelessWidget {
     GlobalKey navBarGlobalKey = GlobalKey(debugLabel: 'bottomAppBar');
 
     return Scaffold(
-        key: navBarGlobalKey,
-        backgroundColor: const Color.fromARGB(255, 168, 159, 104),
-        appBar: AppBar(
-          elevation: 0,
-          centerTitle: true,
-          title: const Text('new post',
-              style: TextStyle(
-                  color: Color.fromARGB(255, 65, 82, 31), fontSize: 28)),
-          backgroundColor: const Color.fromARGB(255, 245, 253, 198),
-          leading: homeButton(context, user, googleSignIn),
-          actions: [postButton()],
+      key: navBarGlobalKey,
+      backgroundColor: const Color.fromARGB(255, 168, 159, 104),
+      appBar: AppBar(
+        elevation: 0,
+        centerTitle: true,
+        title: const Text('new post',
+            style: TextStyle(
+                color: Color.fromARGB(255, 65, 82, 31), fontSize: 28)),
+        backgroundColor: const Color.fromARGB(255, 245, 253, 198),
+        leading: homeButton(context, user, googleSignIn),
+        actions: [postButton()],
+      ),
+      bottomNavigationBar: buildNavBar(context, user, googleSignIn),
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            TextField(
+              style: const TextStyle(fontSize: 20),
+              maxLength: 1000,
+              onChanged: (content) {
+                // HELLO FIONA CAN U DO THIS SHIT ALDJGKLSJGLSKJSLKJL
+              },
+              textAlignVertical: TextAlignVertical.top,
+              decoration: InputDecoration(
+                  suffixIcon: IconButton(
+                      onPressed: () {}, icon: const Icon(Icons.discount)),
+                  filled: true,
+                  fillColor: Colors.white,
+                  labelText: 'My Post',
+                  alignLabelWithHint: true,
+                  hintText: 'Hey community!',
+                  hintStyle: const TextStyle(fontSize: 20)),
+              scrollPadding: const EdgeInsets.all(20.0),
+              keyboardType: TextInputType.multiline,
+              maxLines: 99999,
+              autofocus: true,
+            )
+          ],
         ),
-        bottomNavigationBar: buildNavBar(context, user, googleSignIn),
-        body: Column(children: <Widget>[
-          TextFormField(
-            style: const TextStyle(fontSize: 20),
-            maxLength: 1000,
-            autofocus: true,
-            onChanged: (content) {},
-            textAlignVertical: TextAlignVertical.top,
-            decoration: const InputDecoration(
-                counterText: '',
-                contentPadding: EdgeInsets.fromLTRB(25, 25, 25, 540),
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Color.fromARGB(255, 14, 20, 3)),
-                ),
-                focusedBorder: UnderlineInputBorder(
-                  borderSide:
-                      BorderSide(color: Color.fromARGB(255, 65, 82, 31)),
-                ),
-                filled: true,
-                fillColor: Colors.white,
-                labelText: 'My Post',
-                alignLabelWithHint: true,
-                hintText: 'Hey community!',
-                hintStyle: TextStyle(fontSize: 20)),
-          ),
-        ]));
+      ),
+    );
   }
 
   deleteChangesAlert(BuildContext context) {
