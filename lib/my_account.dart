@@ -1,5 +1,4 @@
 import 'package:auxilium/edit_user.dart';
-import 'package:auxilium/community.dart';
 import 'package:auxilium/login.dart';
 import 'package:auxilium/navbar.dart';
 import 'package:flutter/material.dart';
@@ -68,22 +67,20 @@ class MyAccountPageState extends State<MyAccountPage> {
                   Stack(
                     alignment: const FractionalOffset(1.2, 1.22),
                     children: <Widget>[
-                      Container(
-                        child: InkWell(
-                          onTap: () => {},
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(100),
-                            child: CircleAvatar(
-                              foregroundImage:
-                                  NetworkImage(widget.user.photoUrl),
-                              backgroundColor:
-                                  const Color.fromARGB(255, 65, 82, 31),
-                              radius: 36,
-                              child: Text(getInitials(widget.user.displayName),
-                                  style: const TextStyle(
-                                      color: Color.fromARGB(255, 245, 195, 150),
-                                      fontSize: 18)),
-                            ),
+                      InkWell(
+                        onTap: () => {},
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(100),
+                          child: CircleAvatar(
+                            foregroundImage: NetworkImage(widget.user.photoUrl),
+                            backgroundColor:
+                                const Color.fromARGB(255, 65, 82, 31),
+                            radius: 36,
+                            child: Text(getInitials(widget.user.displayName),
+                                style: const TextStyle(
+                                  color: Color.fromARGB(255, 245, 195, 150),
+                                  fontSize: 18,
+                                )),
                           ),
                         ),
                       ),
@@ -122,13 +119,13 @@ class MyAccountPageState extends State<MyAccountPage> {
                         fontSize: 18,
                       ),
                       textAlign: TextAlign.center),
-                  // PLACEHOLDER TEXT FOR BIO INPUT
                   const SizedBox(
                     height: 16,
                   ),
                   const SizedBox(
                     width: 300,
                     child: Text(
+                        // PLACEHOLDER TEXT FOR BIO INPUT
                         'Software Engineer  | Mother of 5 | Life, Laugh, Love',
                         style: TextStyle(
                           color: Color.fromARGB(255, 65, 82, 31),
@@ -271,9 +268,9 @@ class MyAccountPageState extends State<MyAccountPage> {
     Widget confirmButton = IconButton(
         icon: const Icon(Icons.check),
         onPressed: () async {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => const LoginPage()));
           googleSignIn.disconnect();
-          const LoginPage();
-          Navigator.of(context).pop();
         });
     Widget cancelButton = IconButton(
         icon: const Icon(Icons.cancel),

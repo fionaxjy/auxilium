@@ -1,11 +1,9 @@
-import 'package:auxilium/community.dart';
-import 'package:auxilium/create_user.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:async';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'my_account.dart';
+import 'create_user.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 final usersRef = FirebaseFirestore.instance.collection('Users');
 final DateTime timestamp = DateTime.now();
@@ -37,17 +35,11 @@ class LoginState extends State<LoginPage> {
     _googleSignIn.signInSilently();
   }
 
+  // sign-in method
   Future<void> _handleSignIn() async {
     _currentUser =
         await _googleSignIn.signIn().then((account) => _signIn(account));
   }
-
-  // sign-in method
-  // _handleSignIn() {
-  //   _googleSignIn.signInSilently(suppressErrors: false).then((account) {
-  //     _signIn(account);
-  //   });
-  // }
 
   _signIn(GoogleSignInAccount account) {
     _currentUser = account;
@@ -77,7 +69,10 @@ class LoginState extends State<LoginPage> {
     GoogleSignInAccount user = _currentUser;
 
     if (user != null) {
-      return MyAccountPage(user, _googleSignIn);
+      /* if (!user.HasData) {
+        return CreateUser(user, _googleSignIn);
+      }*/
+      return CreateUser(user, _googleSignIn);
     } else {
       return signInPage();
     }

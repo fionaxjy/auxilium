@@ -5,6 +5,8 @@ import 'package:auxilium/notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+import 'create_post.dart';
+
 Widget buildNavBar(
     BuildContext context, GoogleSignInAccount user, GoogleSignIn googleSignIn) {
   return BottomNavigationBar(
@@ -37,7 +39,7 @@ Widget buildNavBar(
             color: const Color.fromARGB(255, 65, 82, 31),
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => NotificationsPage(user, googleSignIn)));
+                  builder: (context) => CreatePost(user, googleSignIn)));
             }),
         label: '',
       ),

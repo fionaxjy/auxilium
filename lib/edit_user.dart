@@ -1,11 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'home_button.dart';
+import 'login.dart';
 import 'my_account.dart';
 import 'navbar.dart';
-
-final usersRef = FirebaseFirestore.instance.collection('Users');
 
 class EditUser extends StatelessWidget {
   final GoogleSignInAccount user;
@@ -15,10 +13,10 @@ class EditUser extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String inputName;
-    String inputMobileNo;
-    String inputBankAccNo;
-    String inputBio;
+    String tempName;
+    String tempMobile;
+    String tempBank;
+    String tempBio;
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 168, 159, 104),
@@ -39,7 +37,7 @@ class EditUser extends StatelessWidget {
             TextFormField(
               maxLength: 30,
               onChanged: (text) {
-                inputName = text;
+                tempName = text;
               },
               decoration: const InputDecoration(
                   enabledBorder: UnderlineInputBorder(
@@ -61,7 +59,7 @@ class EditUser extends StatelessWidget {
               maxLength: 8,
               keyboardType: TextInputType.phone,
               onChanged: (mobileNo) {
-                inputMobileNo = mobileNo;
+                tempMobile = mobileNo;
               },
               decoration: const InputDecoration(
                 enabledBorder: UnderlineInputBorder(
@@ -84,7 +82,7 @@ class EditUser extends StatelessWidget {
               maxLength: 16,
               keyboardType: TextInputType.number,
               onChanged: (accNo) {
-                inputBankAccNo = accNo;
+                tempBank = accNo;
               },
               decoration: const InputDecoration(
                 enabledBorder: UnderlineInputBorder(
@@ -106,7 +104,8 @@ class EditUser extends StatelessWidget {
             TextFormField(
               maxLength: 150,
               onChanged: (bio) {
-                inputBio = bio;
+                // ADD
+                tempBio = bio;
               },
               //initialValue:
               decoration: const InputDecoration(
@@ -139,8 +138,8 @@ class EditUser extends StatelessWidget {
                     primary: const Color.fromARGB(255, 238, 238, 238),
                   ),
                   onPressed: () {
-                    confirmChangesAlert(context, inputName, inputMobileNo,
-                        inputBankAccNo, inputBio);
+                    confirmChangesAlert(
+                        context, tempName, tempMobile, tempBank, tempBio);
                   },
                   child: const Text(
                     'Save Profile',
