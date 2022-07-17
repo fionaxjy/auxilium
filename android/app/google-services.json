@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "34094672700",
+    "project_id": "auxilium-dorona",
+    "storage_bucket": "auxilium-dorona.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:34094672700:android:4b1f07c5baacac3093cc39",
+        "android_client_info": {
+          "package_name": "com.example.auxilium"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "34094672700-r7pk0u03hcaqptgas38htj2odfo4glap.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAvJFI3MUc0OTS1LHxdbNK1d91VXwTCzIY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "34094672700-r7pk0u03hcaqptgas38htj2odfo4glap.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "34094672700-kq39r4jova1f188pilvjafp006im5f71.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.auxilium"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

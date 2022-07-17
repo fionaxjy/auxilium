@@ -1,14 +1,13 @@
-import 'dart:convert';
+/*import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 class PaymentController extends GetxController {
-  Map<String, dynamic>? paymentIntentData;
+  Map<String, dynamic> paymentIntentData;
 
-  Future<void> makePayment(
-      {required String amount, required String currency}) async {
+  Future<void> makePayment({String amount, String currency}) async {
     try {
       paymentIntentData = await createPaymentIntent(amount, currency);
       if (paymentIntentData != null) {
@@ -19,9 +18,9 @@ class PaymentController extends GetxController {
           testEnv: true,
           merchantCountryCode: 'US',
           merchantDisplayName: 'Prospects',
-          customerId: paymentIntentData!['customer'],
-          paymentIntentClientSecret: paymentIntentData!['client_secret'],
-          customerEphemeralKeySecret: paymentIntentData!['ephemeralKey'],
+          customerId: paymentIntentData['customer'],
+          paymentIntentClientSecret: paymentIntentData['client_secret'],
+          customerEphemeralKeySecret: paymentIntentData['ephemeralKey'],
         ));
         displayPaymentSheet();
       }
@@ -77,3 +76,4 @@ class PaymentController extends GetxController {
     return a.toString();
   }
 }
+*/

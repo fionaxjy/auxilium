@@ -3,49 +3,47 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'home_button.dart';
 import 'navbar.dart';
 
-class CausesPage extends StatelessWidget {
+class NotificationsPage extends StatelessWidget {
   final GoogleSignInAccount user;
   final GoogleSignIn googleSignIn;
-  final List<Cause> causeList = const [
-    Cause(Icon(Icons.fastfood), 'Food', 1234),
-    Cause(Icon(Icons.local_hospital), 'Healthcare', 2345),
-    Cause(Icon(Icons.house), 'Housing/Space', 4567),
-    Cause(Icon(Icons.handyman), 'Tools/Utilities', 4567),
-    Cause(Icon(Icons.checkroom), 'Clothes', 123),
-    Cause(Icon(Icons.school), 'Education', 3456),
-    Cause(Icon(Icons.more_horiz), 'Others', 45678)
-  ];
 
-  const CausesPage(this.user, this.googleSignIn, {Key key}) : super(key: key);
+  const NotificationsPage(this.user, this.googleSignIn, {Key key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    List<Notif> notifList = [
+      Notif(NetworkImage(user.photoUrl), user.displayName, DateTime.now(),
+          "User commented on your post"),
+      Notif(NetworkImage(user.photoUrl), user.displayName, DateTime.now(),
+          "User donated to your request"),
+    ];
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 168, 159, 104),
       appBar: AppBar(
           elevation: 0,
           centerTitle: true,
-          title: const Text('causes',
+          title: const Text('notifications',
               style: TextStyle(
                   color: Color.fromARGB(255, 65, 82, 31), fontSize: 28)),
           backgroundColor: const Color.fromARGB(255, 245, 253, 198),
           leading: homeButton(context, user, googleSignIn)),
       body: ListView.builder(
         padding: const EdgeInsets.fromLTRB(5, 20, 5, 0),
-        itemCount: causeList.length,
+        itemCount: notifList.length,
         itemBuilder: (context, index) {
           return Card(
             child: ListTile(
               onTap: () {},
-              leading: causeList[index].icons,
+              leading: CircleAvatar(foregroundImage: notifList[index].pic),
               title: Text(
-                causeList[index].category,
+                notifList[index].name,
                 style: const TextStyle(fontSize: 20),
               ),
               subtitle: Text(
-                "${causeList[index].numPost} Posts",
-                style: const TextStyle(fontSize: 12),
+                "${notifList[index].time.toString()} \n \n ${notifList[index].content}",
               ),
+              isThreeLine: true,
             ),
           );
         },
@@ -55,14 +53,16 @@ class CausesPage extends StatelessWidget {
   }
 }
 
-class Cause {
-  final Widget icons;
-  final String category;
-  final int numPost;
-  const Cause(this.icons, this.category, this.numPost);
+class Notif {
+  final NetworkImage pic;
+  final String name;
+  final DateTime time;
+  final String content;
+
+  const Notif(this.pic, this.name, this.time, this.content);
 
   @override
   String toString() {
-    return "Cause $category with $numPost Posts";
+    return "Poster $name at ${time.toString()}";
   }
 }
