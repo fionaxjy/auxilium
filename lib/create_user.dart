@@ -15,6 +15,10 @@ class CreateUser extends StatefulWidget {
 
 class CreateUserState extends State<CreateUser> {
   int stateNo = 1; // Name, Mobile, Bank, Bio
+  String tempName;
+  String tempMobile;
+  String tempBank;
+  String tempBio;
 
   Widget cancelNextButton(BuildContext context, GoogleSignInAccount user,
       GoogleSignIn googleSignIn) {
@@ -124,9 +128,8 @@ class CreateUserState extends State<CreateUser> {
             initialValue: user.displayName,
             style: const TextStyle(fontSize: 18),
             maxLength: 30,
-            onChanged: (text) {
-              // ADD
-              // FirebaseName = text;
+            onChanged: (name) {
+              tempName = name;
             },
             decoration: const InputDecoration(
                 enabledBorder: UnderlineInputBorder(
@@ -163,8 +166,7 @@ class CreateUserState extends State<CreateUser> {
                 maxLength: 30,
                 keyboardType: TextInputType.phone,
                 onChanged: (mobileNo) {
-                  // ADD
-                  //FirebaseMobile = mobileNo as int;
+                  tempMobile = mobileNo;
                 },
                 decoration: const InputDecoration(
                   enabledBorder: UnderlineInputBorder(
@@ -201,11 +203,10 @@ class CreateUserState extends State<CreateUser> {
               ),
               TextFormField(
                 style: const TextStyle(fontSize: 18),
-                maxLength: 17,
+                maxLength: 16,
                 keyboardType: TextInputType.number,
                 onChanged: (accNo) {
-                  // ADD
-                  // FirebaseBankNo = accNo as int;
+                  tempBank = accNo;
                 },
                 decoration: const InputDecoration(
                   enabledBorder: UnderlineInputBorder(
@@ -220,7 +221,7 @@ class CreateUserState extends State<CreateUser> {
                   fillColor: Colors.white,
                   suffixIcon: Icon(Icons.account_balance_wallet),
                   labelText: 'Bank Account Number',
-                  hintText: '123 4567 890',
+                  hintText: '1234 5678 9098 7654',
                   labelStyle: TextStyle(color: Color.fromARGB(255, 65, 82, 31)),
                 ),
               ),
@@ -244,8 +245,7 @@ class CreateUserState extends State<CreateUser> {
                 style: const TextStyle(fontSize: 18),
                 maxLength: 150,
                 onChanged: (bio) {
-                  // ADD
-                  // FirebaseBio = bio;
+                  tempBio = bio;
                 },
                 //initialValue:
                 decoration: const InputDecoration(

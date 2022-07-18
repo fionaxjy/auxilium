@@ -4,6 +4,10 @@ import 'dart:async';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'create_user.dart';
 import 'my_account.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+final usersRef = FirebaseFirestore.instance.collection('Users');
+final DateTime timestamp = DateTime.now();
 
 GoogleSignIn _googleSignIn = GoogleSignIn(
   scopes: <String>[
@@ -34,7 +38,24 @@ class LoginState extends State<LoginPage> {
 
   // sign-in method
   Future<void> _handleSignIn() async {
-    _currentUser = await _googleSignIn.signIn();
+
+    _currentUser =
+        await _googleSignIn.signIn().then((account) => _signIn(account));
+  }
+
+  _signIn(GoogleSignInAccount account) {
+    _currentUser = account;
+    if (_currentUser != null) {
+      createUserInFirestore();
+    }
+  }
+
+  createUserInFirestore() async {
+    final DocumentSnapshot doc = await usersRef.doc(_currentUser.id).get();
+    if (!doc.exists) {
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => CreateUser(_currentUser, _googleSignIn)));
+    }
   }
 
   @override

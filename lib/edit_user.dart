@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'home_button.dart';
+import 'login.dart';
+import 'my_account.dart';
 import 'navbar.dart';
 
 class EditUser extends StatelessWidget {
@@ -12,8 +14,8 @@ class EditUser extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String tempName;
-    int tempMobile;
-    int tempBank;
+    String tempMobile;
+    String tempBank;
     String tempBio;
 
     return Scaffold(
@@ -36,7 +38,6 @@ class EditUser extends StatelessWidget {
               initialValue: user.displayName,
               maxLength: 30,
               onChanged: (text) {
-                // ADD
                 tempName = text;
               },
               decoration: const InputDecoration(
@@ -56,11 +57,10 @@ class EditUser extends StatelessWidget {
                       TextStyle(color: Color.fromARGB(255, 65, 82, 31))),
             ),
             TextFormField(
-              maxLength: 30,
+              maxLength: 8,
               keyboardType: TextInputType.phone,
               onChanged: (mobileNo) {
-                // ADD
-                tempMobile = mobileNo as int;
+                tempMobile = mobileNo;
               },
               decoration: const InputDecoration(
                 enabledBorder: UnderlineInputBorder(
@@ -80,11 +80,10 @@ class EditUser extends StatelessWidget {
               ),
             ),
             TextFormField(
-              maxLength: 17,
+              maxLength: 16,
               keyboardType: TextInputType.number,
               onChanged: (accNo) {
-                // ADD
-                tempBank = accNo as int;
+                tempBank = accNo;
               },
               decoration: const InputDecoration(
                 enabledBorder: UnderlineInputBorder(
@@ -99,7 +98,7 @@ class EditUser extends StatelessWidget {
                 fillColor: Colors.white,
                 suffixIcon: Icon(Icons.account_balance_wallet),
                 labelText: 'Bank Account Number',
-                hintText: '123 4567 890',
+                hintText: '1234 5678 9098 7654',
                 labelStyle: TextStyle(color: Color.fromARGB(255, 65, 82, 31)),
               ),
             ),
@@ -140,7 +139,8 @@ class EditUser extends StatelessWidget {
                     primary: const Color.fromARGB(255, 238, 238, 238),
                   ),
                   onPressed: () {
-                    confirmChangesAlert(context);
+                    confirmChangesAlert(
+                        context, tempName, tempMobile, tempBank, tempBio);
                   },
                   child: const Text(
                     'Save Profile',
@@ -153,7 +153,9 @@ class EditUser extends StatelessWidget {
     );
   }
 
-  confirmChangesAlert(BuildContext context) {
+  confirmChangesAlert(BuildContext context, String name, String mobileNo,
+      String bankAccNo, String bio) {
+      
     // set up the buttons
     IconButton cancelButton = IconButton(
       icon: const Icon(Icons.cancel),
@@ -164,9 +166,14 @@ class EditUser extends StatelessWidget {
     Widget confirmButton = IconButton(
       icon: const Icon(Icons.check),
       onPressed: () async {
-        // upload all temp data to DB
-        Navigator.of(context).pop();
-        Navigator.pop(context);
+        await usersRef.doc(user.id).set({
+          "name": name,
+          "mobileNo": mobileNo,
+          "bankAccNo": bankAccNo,
+          "bio": bio,
+          "bookmarks": {},
+        }).then((value) => Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => MyAccountPage(user, googleSignIn))));
       },
     );
     // set up the AlertDialog
