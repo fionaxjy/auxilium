@@ -43,7 +43,7 @@ class CreateUserState extends State<CreateUser> {
             color: stateNo == 1 ? Colors.grey : Colors.black,
           ),
           const Spacer(),
-          IconButton(
+          TextButton.icon(
             onPressed: () async {
               if (stateNo < 4) {
                 setState(() {
@@ -55,8 +55,12 @@ class CreateUserState extends State<CreateUser> {
                     builder: (context) => MyAccountPage(user, googleSignIn)));
               }
             },
+            label: stateNo == 4
+                ? const Text('Let\'s Go!', style: TextStyle(fontSize: 18))
+                : const Text(''),
             icon: stateNo == 4
-                ? const Icon(Icons.check)
+                ? const Icon(Icons.check,
+                    color: Color.fromARGB(255, 65, 82, 31))
                 : const Icon(Icons.arrow_forward_ios),
           )
         ]);
