@@ -3,7 +3,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:async';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'create_user.dart';
-import 'my_account.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 final usersRef = FirebaseFirestore.instance.collection('Users');
@@ -38,7 +37,6 @@ class LoginState extends State<LoginPage> {
 
   // sign-in method
   Future<void> _handleSignIn() async {
-
     _currentUser =
         await _googleSignIn.signIn().then((account) => _signIn(account));
   }
@@ -50,6 +48,7 @@ class LoginState extends State<LoginPage> {
     }
   }
 
+// SAME AS LINES 72-81, CREATES MULTIPLE PAGES. PROBLEM
   createUserInFirestore() async {
     final DocumentSnapshot doc = await usersRef.doc(_currentUser.id).get();
     if (!doc.exists) {
@@ -71,6 +70,7 @@ class LoginState extends State<LoginPage> {
     GoogleSignInAccount user = _currentUser;
 
     if (user != null) {
+      // FIONA PLEASE RESOLVE THIS !!!!!!
       /* if (!user.HasData) {
         return CreateUser(user, _googleSignIn);
       }*/

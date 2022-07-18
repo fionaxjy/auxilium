@@ -33,7 +33,7 @@ class CreatePost extends StatelessWidget {
 
     return Scaffold(
       key: navBarGlobalKey,
-      backgroundColor: const Color.fromARGB(255, 168, 159, 104),
+      backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0,
         centerTitle: true,
@@ -45,33 +45,43 @@ class CreatePost extends StatelessWidget {
         actions: [postButton()],
       ),
       bottomNavigationBar: buildNavBar(context, user, googleSignIn),
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            TextField(
-              style: const TextStyle(fontSize: 20),
-              maxLength: 1000,
-              onChanged: (content) {
-                // HELLO FIONA CAN U DO THIS SHIT ALDJGKLSJGLSKJSLKJL
-              },
-              textAlignVertical: TextAlignVertical.top,
-              decoration: InputDecoration(
-                  suffixIcon: IconButton(
-                      onPressed: () {}, icon: const Icon(Icons.discount)),
-                  filled: true,
-                  fillColor: Colors.white,
-                  labelText: 'My Post',
-                  alignLabelWithHint: true,
-                  hintText: 'Hey community!',
-                  hintStyle: const TextStyle(fontSize: 20)),
-              scrollPadding: const EdgeInsets.all(20.0),
-              keyboardType: TextInputType.multiline,
-              maxLines: 99999,
-              autofocus: true,
-            )
-          ],
-        ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(left: 5, right: 5),
+            child: TextButton.icon(
+              onPressed: () {},
+              icon: const Icon(Icons.discount),
+              label: const Text(
+                'Tags',
+                style: TextStyle(fontSize: 15),
+              ),
+              style: const ButtonStyle(
+                  alignment: AlignmentDirectional.centerStart),
+            ),
+          ),
+          TextField(
+            style: const TextStyle(fontSize: 20),
+            maxLength: 1200,
+            onChanged: (content) {
+              // HELLO FIONA CAN U DO THIS SHIT ALDJGKLSJGLSKJSLKJL
+            },
+            textAlignVertical: TextAlignVertical.top,
+            decoration: const InputDecoration(
+                border: InputBorder.none,
+                counterText: '',
+                filled: true,
+                fillColor: Colors.white,
+                labelText: 'My Post',
+                alignLabelWithHint: true,
+                hintText: 'Hey community!',
+                hintStyle: TextStyle(fontSize: 20)),
+            keyboardType: TextInputType.multiline,
+            maxLines: 25,
+            autofocus: true,
+          )
+        ],
       ),
     );
   }

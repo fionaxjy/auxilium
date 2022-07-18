@@ -1,7 +1,8 @@
-import 'package:auxilium/login.dart';
 import 'package:auxilium/my_account.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+
+import 'login.dart';
 
 class CreateUser extends StatefulWidget {
   final GoogleSignInAccount user;
@@ -15,10 +16,10 @@ class CreateUser extends StatefulWidget {
 
 class CreateUserState extends State<CreateUser> {
   int stateNo = 1; // Name, Mobile, Bank, Bio
-  String tempName;
-  String tempMobile;
-  String tempBank;
-  String tempBio;
+  String tempName = '';
+  String tempMobile = '';
+  String tempBank = '';
+  String tempBio = '';
 
   Widget cancelNextButton(BuildContext context, GoogleSignInAccount user,
       GoogleSignIn googleSignIn) {
@@ -29,29 +30,34 @@ class CreateUserState extends State<CreateUser> {
             height: 100,
           ),
           IconButton(
-              onPressed: () {
-                setState(() {
-                  if (stateNo > 1) {
-                    stateNo--;
-                  } else {
-                    googleSignIn.disconnect();
-                  }
-                });
-              },
-              icon: const Icon(Icons.arrow_back_ios)),
-          const Spacer(),
-          IconButton(
             onPressed: () {
               setState(() {
-                if (stateNo < 4) {
-                  stateNo++;
+                if (stateNo > 1) {
+                  stateNo--;
                 } else {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => MyAccountPage(user, googleSignIn)));
+                  stateNo == 1;
                 }
               });
             },
-            icon: const Icon(Icons.arrow_forward_ios),
+            icon: const Icon(Icons.arrow_back_ios),
+            color: stateNo == 1 ? Colors.grey : Colors.black,
+          ),
+          const Spacer(),
+          IconButton(
+            onPressed: () async {
+              if (stateNo < 4) {
+                setState(() {
+                  stateNo++;
+                });
+              } else {
+                // FIONA INSERT CONFIRM CHANGES FUNCTIONS HERE
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => MyAccountPage(user, googleSignIn)));
+              }
+            },
+            icon: stateNo == 4
+                ? const Icon(Icons.check)
+                : const Icon(Icons.arrow_forward_ios),
           )
         ]);
   }
@@ -125,7 +131,7 @@ class CreateUserState extends State<CreateUser> {
           ),
           TextFormField(
             key: Key(user.displayName),
-            initialValue: user.displayName,
+            initialValue: tempName.isEmpty ? user.displayName : tempName,
             style: const TextStyle(fontSize: 18),
             maxLength: 30,
             onChanged: (name) {
@@ -162,6 +168,7 @@ class CreateUserState extends State<CreateUser> {
                 height: 30,
               ),
               TextFormField(
+                initialValue: tempMobile.isEmpty ? '' : tempMobile,
                 style: const TextStyle(fontSize: 18),
                 maxLength: 30,
                 keyboardType: TextInputType.phone,
@@ -202,6 +209,8 @@ class CreateUserState extends State<CreateUser> {
                 height: 30,
               ),
               TextFormField(
+                key: const Key(null),
+                initialValue: tempBank.isEmpty ? '' : tempBank,
                 style: const TextStyle(fontSize: 18),
                 maxLength: 16,
                 keyboardType: TextInputType.number,
@@ -242,12 +251,12 @@ class CreateUserState extends State<CreateUser> {
                 height: 30,
               ),
               TextFormField(
+                initialValue: tempBio.isEmpty ? '' : tempBio,
                 style: const TextStyle(fontSize: 18),
                 maxLength: 150,
                 onChanged: (bio) {
                   tempBio = bio;
                 },
-                //initialValue:
                 decoration: const InputDecoration(
                   enabledBorder: UnderlineInputBorder(
                     borderSide:
