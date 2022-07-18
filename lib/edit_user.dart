@@ -35,6 +35,7 @@ class EditUser extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
             TextFormField(
+              initialValue: user.displayName,
               maxLength: 30,
               onChanged: (text) {
                 tempName = text;
@@ -154,6 +155,7 @@ class EditUser extends StatelessWidget {
 
   confirmChangesAlert(BuildContext context, String name, String mobileNo,
       String bankAccNo, String bio) {
+      
     // set up the buttons
     IconButton cancelButton = IconButton(
       icon: const Icon(Icons.cancel),

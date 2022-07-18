@@ -1,3 +1,4 @@
+import 'package:auxilium/login.dart';
 import 'package:auxilium/my_account.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -13,7 +14,7 @@ class CreateUser extends StatefulWidget {
 }
 
 class CreateUserState extends State<CreateUser> {
-  int stateNo = 1;
+  int stateNo = 1; // Name, Mobile, Bank, Bio
   String tempName;
   String tempMobile;
   String tempBank;
@@ -124,6 +125,7 @@ class CreateUserState extends State<CreateUser> {
           ),
           TextFormField(
             key: Key(user.displayName),
+            initialValue: user.displayName,
             style: const TextStyle(fontSize: 18),
             maxLength: 30,
             onChanged: (name) {
@@ -161,7 +163,7 @@ class CreateUserState extends State<CreateUser> {
               ),
               TextFormField(
                 style: const TextStyle(fontSize: 18),
-                maxLength: 8,
+                maxLength: 30,
                 keyboardType: TextInputType.phone,
                 onChanged: (mobileNo) {
                   tempMobile = mobileNo;
