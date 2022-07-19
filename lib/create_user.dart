@@ -2,8 +2,6 @@ import 'package:auxilium/my_account.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-import 'login.dart';
-
 class CreateUser extends StatefulWidget {
   final GoogleSignInAccount user;
   final GoogleSignIn googleSignIn;
@@ -56,11 +54,11 @@ class CreateUserState extends State<CreateUser> {
               }
             },
             label: stateNo == 4
-                ? const Text('Let\'s Go!', style: TextStyle(fontSize: 18))
+                ? const Text('Let\'s Go!',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))
                 : const Text(''),
             icon: stateNo == 4
-                ? const Icon(Icons.check,
-                    color: Color.fromARGB(255, 65, 82, 31))
+                ? const Icon(Icons.check, color: Colors.black)
                 : const Icon(Icons.arrow_forward_ios),
           )
         ]);
@@ -71,6 +69,7 @@ class CreateUserState extends State<CreateUser> {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 220, 227, 196),
       appBar: AppBar(
+          automaticallyImplyLeading: false,
           elevation: 0,
           centerTitle: true,
           title: const Text('create user',

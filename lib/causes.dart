@@ -7,13 +7,19 @@ class CausesPage extends StatelessWidget {
   final GoogleSignInAccount user;
   final GoogleSignIn googleSignIn;
   final List<Cause> causeList = const [
-    Cause(Icon(Icons.fastfood), 'Food', 1234),
-    Cause(Icon(Icons.local_hospital), 'Healthcare', 2345),
-    Cause(Icon(Icons.house), 'Housing/Space', 4567),
-    Cause(Icon(Icons.handyman), 'Tools/Utilities', 4567),
-    Cause(Icon(Icons.checkroom), 'Clothes', 123),
-    Cause(Icon(Icons.school), 'Education', 3456),
-    Cause(Icon(Icons.more_horiz), 'Others', 45678)
+    Cause(Icon(Icons.fastfood), 'Food',
+        'A meal, cooking ingredients, canned food...', 1234),
+    Cause(Icon(Icons.local_hospital), 'Healthcare',
+        'Medical bills, medication, first-aid...', 2345),
+    Cause(Icon(Icons.house), 'Space',
+        'Rooms, working areas, facilities, housing...', 4567),
+    Cause(Icon(Icons.handyman), 'Utilities',
+        'Washing machine, cooking utensils, tools', 4567),
+    Cause(Icon(Icons.checkroom), 'Clothes',
+        'Second-hand or new clothing, shoes, pants...', 123),
+    Cause(Icon(Icons.school), 'Education',
+        'Tuition, textbooks,  uniform, stationary...', 3456),
+    Cause(Icon(Icons.more_horiz), 'Others', 'Miscellaneous', 45678)
   ];
 
   const CausesPage(this.user, this.googleSignIn, {Key key}) : super(key: key);
@@ -58,8 +64,9 @@ class CausesPage extends StatelessWidget {
 class Cause {
   final Widget icons;
   final String category;
+  final String about;
   final int numPost;
-  const Cause(this.icons, this.category, this.numPost);
+  const Cause(this.icons, this.category, this.about, this.numPost);
 
   @override
   String toString() {
