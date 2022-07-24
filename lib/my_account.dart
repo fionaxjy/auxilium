@@ -1,6 +1,7 @@
 import 'package:auxilium/edit_user.dart';
 import 'package:auxilium/login.dart';
 import 'package:auxilium/navbar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'home_button.dart';
@@ -41,7 +42,7 @@ class MyAccountPageState extends State<MyAccountPage> {
                   color: Color.fromARGB(255, 65, 82, 31), fontSize: 28)),
           backgroundColor: const Color.fromARGB(255, 245, 253, 198),
           leading: homeButton(context, widget.user, widget.googleSignIn),
-          actions: [signOutButton(context, widget.googleSignIn)],
+          actions: [signOutButton(context, widget.googleSignIn, widget.user)],
         ),
         body: Column(children: [
           Container(
@@ -252,7 +253,8 @@ class MyAccountPageState extends State<MyAccountPage> {
   }
 }*/
 
-  Widget signOutButton(BuildContext context, GoogleSignIn googleSignIn) {
+  Widget signOutButton(BuildContext context, GoogleSignIn googleSignIn,
+      GoogleSignInAccount user) {
     return IconButton(
         icon: const Icon(
           Icons.logout,
@@ -260,32 +262,34 @@ class MyAccountPageState extends State<MyAccountPage> {
         ),
         color: const Color.fromARGB(255, 65, 82, 31),
         onPressed: () {
-          signOutAlert(context, googleSignIn);
+          signOutAlert(context, googleSignIn, user);
         });
   }
 
-  signOutAlert(BuildContext context, GoogleSignIn googleSignIn) {
-    Widget confirmButton = IconButton(
-        icon: const Icon(Icons.check),
-        onPressed: () async {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => const LoginPage()));
-          googleSignIn.disconnect();
-        });
-    Widget cancelButton = IconButton(
-        icon: const Icon(Icons.cancel),
-        onPressed: () {
-          Navigator.of(context).pop();
-        });
-    AlertDialog signOutAlert = AlertDialog(
-      content: const Text('Confirm Sign Out?'),
-      actions: [confirmButton, cancelButton],
-    );
-    showDialog(
+  signOutAlert(BuildContext context, GoogleSignIn googleSignIn,
+      GoogleSignInAccount user) {
+    showCupertinoModalPopup<void>(
       context: context,
-      builder: (BuildContext context) {
-        return signOutAlert;
-      },
+      builder: (BuildContext context) => CupertinoAlertDialog(
+        title: Text('Sign Out of ${user.displayName}?'),
+        actions: <CupertinoDialogAction>[
+          CupertinoDialogAction(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('Cancel'),
+          ),
+          CupertinoDialogAction(
+            isDestructiveAction: true,
+            onPressed: () {
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const LoginPage()));
+              googleSignIn.disconnect();
+            },
+            child: const Text('Sign Out'),
+          )
+        ],
+      ),
     );
   }
 }

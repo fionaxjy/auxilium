@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'cause_obj.dart';
 import 'home_button.dart';
 import 'navbar.dart';
 
@@ -58,18 +59,5 @@ class CausesPage extends StatelessWidget {
       ),
       bottomNavigationBar: buildNavBar(context, user, googleSignIn),
     );
-  }
-}
-
-class Cause {
-  final Widget icons;
-  final String category;
-  final String about;
-  final int numPost;
-  const Cause(this.icons, this.category, this.about, this.numPost);
-
-  @override
-  String toString() {
-    return "Cause $category with $numPost Posts";
   }
 }
