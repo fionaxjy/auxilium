@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 import 'home_button.dart';
 import 'navbar.dart';
@@ -38,10 +39,11 @@ class NotificationsPageState extends State<NotificationsPage> {
         .orderBy('timestamp', descending: true)
         .limit(50)
         .get();
+    List<NotificationsItem> notificationsItems = [];
     snapshot.docs.forEach((doc) {
-      print('Activity Feed Item: ${doc.data()}');
+      notificationsItems.add(NotificationsItem.fromDoc(doc));
     });
-    return snapshot.docs;
+    return notificationsItems;
   }
 
   @override
@@ -63,7 +65,9 @@ class NotificationsPageState extends State<NotificationsPage> {
           if (!snapshot.hasData) {
             return CircularProgressIndicator();
           }
-          return Text("Activity Feed");
+          return ListView(
+            children: snapshot.data,
+          );
         },
       )),
       bottomNavigationBar: buildNavBar(context, user, googleSignIn),
@@ -94,7 +98,7 @@ class NotificationsItem extends StatelessWidget {
   factory NotificationsItem.fromDoc(DocumentSnapshot doc) {
     return NotificationsItem(
       userId: doc['userId'],
-      userDp: doc['userDp'],
+      //userDp: doc['userDp'],
       postId: doc['postId'],
       commentData: doc['content'],
       timestamp: doc['timestamp'],
@@ -103,11 +107,36 @@ class NotificationsItem extends StatelessWidget {
   }
 
   configureMediaPreview() {
-    notificationItemText = 'commented on your post: $commentData';
+    notificationItemText = 'You received a comment on your post: $commentData';
   }
 
   @override
   Widget build(BuildContext context) {
-    return Text('Notifications Item');
+    configureMediaPreview();
+
+    return Padding(
+        padding: const EdgeInsets.fromLTRB(5, 20, 5, 0),
+        child: Container(
+          color: Colors.white54,
+          child: ListTile(
+            title: GestureDetector(
+              onTap: () => print('show profile'), // post viewer
+              child: RichText(
+                overflow: TextOverflow.ellipsis,
+                text: TextSpan(style: const TextStyle(fontSize: 20), children: [
+                  TextSpan(
+                    text: ' $notificationItemText',
+                  ),
+                ]),
+              ),
+            ),
+            //leading: CircleAvatar(backgroundImage: NetworkImage(userDp)),
+            subtitle: Text(
+              timeago.format(timestamp.toDate()),
+              overflow: TextOverflow.ellipsis,
+            ),
+            trailing: mediaPreview,
+          ),
+        ));
   }
 }

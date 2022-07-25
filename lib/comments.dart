@@ -78,7 +78,6 @@ class CommentsState extends State<CommentsPage> {
       "userId": user.id,
       "userDp": userDp,
     });
-    //bool isNotPostOwner = userId != currentuser.id;
     notificationsRef.doc(userId).collection('Notifications').add({
       "type": "comment",
       "content": commentController.text,
