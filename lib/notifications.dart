@@ -123,7 +123,7 @@ class NotificationsItem extends StatelessWidget {
               onTap: () => print('show profile'), // post viewer
               child: RichText(
                 overflow: TextOverflow.ellipsis,
-                text: TextSpan(style: const TextStyle(fontSize: 20), children: [
+                text: TextSpan(style: const TextStyle(fontSize: 14), children: [
                   TextSpan(
                     text: ' $notificationItemText',
                   ),

@@ -1,4 +1,5 @@
 import 'package:auxilium/login.dart';
+import 'package:auxilium/navbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -92,31 +93,33 @@ class CommentsState extends State<CommentsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: const Color.fromARGB(255, 168, 159, 104),
-        appBar: AppBar(
-          elevation: 0,
-          centerTitle: true,
-          title: const Text('comments',
-              style: TextStyle(
-                  color: Color.fromARGB(255, 65, 82, 31), fontSize: 28)),
-          backgroundColor: const Color.fromARGB(255, 245, 253, 198),
-          leading: homeButton(context, widget.user, widget.googleSignIn),
-        ),
-        body: Column(
-          children: <Widget>[
-            Expanded(child: buildComments()),
-            Divider(),
-            ListTile(
-                title: TextFormField(
-                  controller: commentController,
-                  decoration: InputDecoration(labelText: "Write a comment..."),
-                ),
-                trailing: OutlinedButton(
-                  onPressed: () => addComment(),
-                  child: Text("Post"),
-                ))
-          ],
-        ));
+      appBar: AppBar(
+        elevation: 0,
+        centerTitle: true,
+        title: const Text('comments',
+            style: TextStyle(
+                color: Color.fromARGB(255, 65, 82, 31), fontSize: 28)),
+        backgroundColor: const Color.fromARGB(255, 245, 253, 198),
+        leading: homeButton(context, widget.user, widget.googleSignIn),
+      ),
+      body: Column(
+        children: <Widget>[
+          Expanded(child: buildComments()),
+          Divider(),
+          ListTile(
+              title: TextFormField(
+                controller: commentController,
+                decoration: InputDecoration(labelText: "Write a comment..."),
+              ),
+              trailing: OutlinedButton(
+                onPressed: () => addComment(),
+                child: Text("Post"),
+              ))
+        ],
+      ),
+      bottomNavigationBar:
+          buildNavBar(context, widget.user, widget.googleSignIn),
+    );
   }
 }
 
