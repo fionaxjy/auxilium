@@ -1,9 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+
 import 'home_button.dart';
 import 'navbar.dart';
 
-class NotificationsPage extends StatelessWidget {
+final notificationsRef = FirebaseFirestore.instance.collection('Notifications');
+
+class NotificationsPage extends StatefulWidget {
   final GoogleSignInAccount user;
   final GoogleSignIn googleSignIn;
 
@@ -11,13 +16,36 @@ class NotificationsPage extends StatelessWidget {
       : super(key: key);
 
   @override
+  NotificationsPageState createState() => NotificationsPageState(
+        user: user,
+        googleSignIn: googleSignIn,
+      );
+}
+
+class NotificationsPageState extends State<NotificationsPage> {
+  final GoogleSignInAccount user;
+  final GoogleSignIn googleSignIn;
+
+  NotificationsPageState({
+    this.user,
+    this.googleSignIn,
+  });
+
+  getNotifications() async {
+    QuerySnapshot snapshot = await notificationsRef
+        .doc(user.id)
+        .collection('Notifications')
+        .orderBy('timestamp', descending: true)
+        .limit(50)
+        .get();
+    snapshot.docs.forEach((doc) {
+      print('Activity Feed Item: ${doc.data()}');
+    });
+    return snapshot.docs;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    List<Notif> notifList = [
-      Notif(NetworkImage(user.photoUrl), user.displayName, DateTime.now(),
-          "User commented on your post"),
-      Notif(NetworkImage(user.photoUrl), user.displayName, DateTime.now(),
-          "User donated to your request"),
-    ];
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 168, 159, 104),
       appBar: AppBar(
@@ -28,41 +56,58 @@ class NotificationsPage extends StatelessWidget {
                   color: Color.fromARGB(255, 65, 82, 31), fontSize: 28)),
           backgroundColor: const Color.fromARGB(255, 245, 253, 198),
           leading: homeButton(context, user, googleSignIn)),
-      body: ListView.builder(
-        padding: const EdgeInsets.fromLTRB(5, 20, 5, 0),
-        itemCount: notifList.length,
-        itemBuilder: (context, index) {
-          return Card(
-            child: ListTile(
-              onTap: () {},
-              leading: CircleAvatar(foregroundImage: notifList[index].pic),
-              title: Text(
-                notifList[index].name,
-                style: const TextStyle(fontSize: 20),
-              ),
-              subtitle: Text(
-                "${notifList[index].time.toString()} \n \n ${notifList[index].content}",
-              ),
-              isThreeLine: true,
-            ),
-          );
+      body: Container(
+          child: FutureBuilder(
+        future: getNotifications(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return CircularProgressIndicator();
+          }
+          return Text("Activity Feed");
         },
-      ),
+      )),
       bottomNavigationBar: buildNavBar(context, user, googleSignIn),
     );
   }
 }
 
-class Notif {
-  final NetworkImage pic;
-  final String name;
-  final DateTime time;
-  final String content;
+Widget mediaPreview;
+String notificationItemText;
 
-  const Notif(this.pic, this.name, this.time, this.content);
+class NotificationsItem extends StatelessWidget {
+  final String userId;
+  final String userDp;
+  final String postId;
+  final String commentData;
+  final Timestamp timestamp;
+  final String type;
+
+  NotificationsItem({
+    this.userId,
+    this.userDp,
+    this.postId,
+    this.commentData,
+    this.timestamp,
+    this.type,
+  });
+
+  factory NotificationsItem.fromDoc(DocumentSnapshot doc) {
+    return NotificationsItem(
+      userId: doc['userId'],
+      userDp: doc['userDp'],
+      postId: doc['postId'],
+      commentData: doc['content'],
+      timestamp: doc['timestamp'],
+      type: doc['type'],
+    );
+  }
+
+  configureMediaPreview() {
+    notificationItemText = 'commented on your post: $commentData';
+  }
 
   @override
-  String toString() {
-    return "Poster $name at ${time.toString()}";
+  Widget build(BuildContext context) {
+    return Text('Notifications Item');
   }
 }

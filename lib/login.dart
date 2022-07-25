@@ -6,7 +6,6 @@ import 'create_user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 final usersRef = FirebaseFirestore.instance.collection('Users');
-final DateTime timestamp = DateTime.now();
 
 GoogleSignIn _googleSignIn = GoogleSignIn(
   scopes: <String>[

@@ -55,17 +55,17 @@ class CreateUserState extends State<CreateUser> {
                   "mobileNo": tempMobile,
                   "bankAccNo": tempBank,
                   "bio": tempBio,
-                  "bookmarks": {},
+                  "dp": user.photoUrl,
                 }).then((value) => Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => MyAccountPage(user, googleSignIn))));
               }
             },
             label: stateNo == 4
-                ? const Text('Let\'s Go!', style: TextStyle(fontSize: 18))
+                ? const Text('Let\'s Go!',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))
                 : const Text(''),
             icon: stateNo == 4
-                ? const Icon(Icons.check,
-                    color: Color.fromARGB(255, 65, 82, 31))
+                ? const Icon(Icons.check, color: Colors.black)
                 : const Icon(Icons.arrow_forward_ios),
           )
         ]);
@@ -76,6 +76,7 @@ class CreateUserState extends State<CreateUser> {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 220, 227, 196),
       appBar: AppBar(
+          automaticallyImplyLeading: false,
           elevation: 0,
           centerTitle: true,
           title: const Text('create user',
@@ -170,7 +171,7 @@ class CreateUserState extends State<CreateUser> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               const Text(
-                'your mobile number would be used for authentication, and the transfer of financial resources.',
+                'your mobile number would be used for authentication purposes.',
                 style: TextStyle(fontSize: 18),
               ),
               const SizedBox(
@@ -179,7 +180,7 @@ class CreateUserState extends State<CreateUser> {
               TextFormField(
                 initialValue: tempMobile.isEmpty ? '' : tempMobile,
                 style: const TextStyle(fontSize: 18),
-                maxLength: 8,
+                maxLength: 30,
                 keyboardType: TextInputType.phone,
                 onChanged: (mobileNo) {
                   tempMobile = mobileNo;
@@ -197,7 +198,7 @@ class CreateUserState extends State<CreateUser> {
                   fillColor: Colors.white,
                   suffixIcon: Icon(Icons.phone),
                   labelText: 'Mobile Number',
-                  hintText: 'Used for Paylah/PayNow',
+                  hintText: '12345678',
                   labelStyle: TextStyle(color: Color.fromARGB(255, 65, 82, 31)),
                 ),
               ),

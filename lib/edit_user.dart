@@ -35,6 +35,7 @@ class EditUser extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
             TextFormField(
+              initialValue: user.displayName,
               maxLength: 30,
               onChanged: (text) {
                 tempName = text;
@@ -169,7 +170,7 @@ class EditUser extends StatelessWidget {
           "mobileNo": mobileNo,
           "bankAccNo": bankAccNo,
           "bio": bio,
-          "bookmarks": {},
+          "dp": user.photoUrl,
         }).then((value) => Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => MyAccountPage(user, googleSignIn))));
       },

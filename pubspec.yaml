@@ -35,6 +35,8 @@ dependencies:
 
   firebase_core: ^1.19.2
   cloud_firestore: ^3.3.0
+  flutter_stripe: ^3.3.0
+  timeago: ^3.2.2
 
 
 dev_dependencies:
