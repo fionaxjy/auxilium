@@ -1,6 +1,8 @@
-import 'package:auxilium/my_account.dart';
+import 'package:auxilium/my_account_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+
+import 'login.dart';
 
 class CreateUser extends StatefulWidget {
   final GoogleSignInAccount user;
@@ -48,9 +50,14 @@ class CreateUserState extends State<CreateUser> {
                   stateNo++;
                 });
               } else {
-                // FIONA INSERT CONFIRM CHANGES FUNCTIONS HERE
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => MyAccountPage(user, googleSignIn)));
+                await usersRef.doc(user.id).set({
+                  "name": tempName,
+                  "mobileNo": tempMobile,
+                  "bankAccNo": tempBank,
+                  "bio": tempBio,
+                  "dp": user.photoUrl,
+                }).then((value) => Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => MyAccountPage(user, googleSignIn))));
               }
             },
             label: stateNo == 4
@@ -134,7 +141,7 @@ class CreateUserState extends State<CreateUser> {
           ),
           TextFormField(
             key: Key(user.displayName),
-            initialValue: tempName.isEmpty ? user.displayName : tempName,
+            initialValue: tempName.isEmpty ? '' : tempName,
             style: const TextStyle(fontSize: 18),
             maxLength: 30,
             onChanged: (name) {
@@ -164,7 +171,7 @@ class CreateUserState extends State<CreateUser> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               const Text(
-                'your mobile number would be used for authentication, and the transfer of financial resources.',
+                'your mobile number would be used for authentication purposes.',
                 style: TextStyle(fontSize: 18),
               ),
               const SizedBox(
@@ -191,7 +198,7 @@ class CreateUserState extends State<CreateUser> {
                   fillColor: Colors.white,
                   suffixIcon: Icon(Icons.phone),
                   labelText: 'Mobile Number',
-                  hintText: 'Used for Paylah/PayNow',
+                  hintText: '12345678',
                   labelStyle: TextStyle(color: Color.fromARGB(255, 65, 82, 31)),
                 ),
               ),

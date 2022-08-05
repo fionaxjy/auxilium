@@ -1,8 +1,8 @@
-import 'package:auxilium/causes.dart';
-import 'package:auxilium/community.dart';
-import 'package:auxilium/my_account.dart';
-import 'package:auxilium/notifications.dart';
-import 'package:auxilium/post_alert.dart';
+import 'package:auxilium/causes_page.dart';
+import 'package:auxilium/community_page.dart';
+import 'package:auxilium/my_account_page.dart';
+import 'package:auxilium/notifications_page.dart';
+import 'package:auxilium/alerts.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -37,7 +37,7 @@ Widget buildNavBar(
             icon: const Icon(Icons.add_circle_outline),
             color: const Color.fromARGB(255, 65, 82, 31),
             onPressed: () {
-              postAlert(context, user, googleSignIn);
+              reqDonPostAlert(context, user, googleSignIn);
             }),
         label: '',
       ),

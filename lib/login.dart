@@ -1,4 +1,4 @@
-import 'package:auxilium/my_account.dart';
+import 'package:auxilium/my_account_page.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:async';
@@ -7,7 +7,6 @@ import 'create_user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 final usersRef = FirebaseFirestore.instance.collection('Users');
-final DateTime timestamp = DateTime.now();
 
 GoogleSignIn _googleSignIn = GoogleSignIn(
   scopes: <String>[
@@ -45,7 +44,6 @@ class LoginState extends State<LoginPage> {
   _signIn(GoogleSignInAccount account) {
     _currentUser = account;
     if (_currentUser != null) {
-      print('createUserInFirestore');
       createUserInFirestore();
     }
   }
@@ -54,12 +52,8 @@ class LoginState extends State<LoginPage> {
   createUserInFirestore() async {
     final DocumentSnapshot doc = await usersRef.doc(_currentUser.id).get();
     if (!doc.exists) {
-      print('check doc exists');
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => CreateUser(_currentUser, _googleSignIn)));
-    } else {
-      Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => MyAccountPage(_currentUser, _googleSignIn)));
     }
   }
 
@@ -76,7 +70,12 @@ class LoginState extends State<LoginPage> {
     GoogleSignInAccount user = _currentUser;
 
     if (user != null) {
-      createUserInFirestore();
+      // FIONA PLEASE RESOLVE THIS !!!!!!
+      /*if (!userHasData()) {
+        return CreateUser(user, _googleSignIn);
+      }
+      */
+      return CreateUser(user, _googleSignIn);
     } else {
       return signInPage();
     }

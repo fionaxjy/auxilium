@@ -1,6 +1,6 @@
+import 'package:auxilium/alerts.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'cause_obj.dart';
 import 'home_button.dart';
 import 'navbar.dart';
 
@@ -42,22 +42,38 @@ class CausesPage extends StatelessWidget {
         itemCount: causeList.length,
         itemBuilder: (context, index) {
           return Card(
-            child: ListTile(
-              onTap: () {},
-              leading: causeList[index].icons,
-              title: Text(
-                causeList[index].category,
-                style: const TextStyle(fontSize: 20),
-              ),
-              subtitle: Text(
-                "${causeList[index].numPost} Posts",
-                style: const TextStyle(fontSize: 12),
-              ),
+              child: ListTile(
+            leading: causeList[index].icons,
+            title: Text(
+              causeList[index].category,
+              style: const TextStyle(fontSize: 20),
             ),
-          );
+            subtitle: Text(
+              "${causeList[index].numPost} Posts",
+              style: const TextStyle(fontSize: 12),
+            ),
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                  builder: (context) =>
+                      paymentAmtAlert(context, user, googleSignIn)),
+            ),
+          ));
         },
       ),
       bottomNavigationBar: buildNavBar(context, user, googleSignIn),
     );
+  }
+}
+
+class Cause {
+  final Widget icons;
+  final String category;
+  final String about;
+  final int numPost;
+  const Cause(this.icons, this.category, this.about, this.numPost);
+
+  @override
+  String toString() {
+    return "Cause $category with $numPost Posts";
   }
 }

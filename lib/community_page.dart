@@ -1,4 +1,4 @@
-import 'package:auxilium/postviewer.dart';
+import 'package:auxilium/post%20viewers/comm_post_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'home_button.dart';
@@ -28,17 +28,9 @@ class CommunityPageState extends State<CommunityPage> {
           leading: homeButton(context, widget.user, widget.googleSignIn)),
       bottomNavigationBar:
           buildNavBar(context, widget.user, widget.googleSignIn),
-      body: postViewer(),
-    );
-  }
-
-  Widget buildBottomIconButton(IconData icon, Color color) {
-    return IconButton(
-      icon: Icon(
-        icon,
-        color: color,
-      ),
-      onPressed: () {},
+      // ASSUMING GOOGLE SIGN IN ACCOUNT DISPLAY NAME IS USER NAME AND UNCHANGED, otherwise load username from firebase
+      body: commPostViewer(widget.user, widget.googleSignIn,
+          widget.user.photoUrl, widget.user.displayName),
     );
   }
 }

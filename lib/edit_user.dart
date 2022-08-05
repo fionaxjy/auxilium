@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'home_button.dart';
 import 'login.dart';
-import 'my_account.dart';
+import 'my_account_page.dart';
 import 'navbar.dart';
 
 class EditUser extends StatelessWidget {
@@ -155,7 +155,6 @@ class EditUser extends StatelessWidget {
 
   confirmChangesAlert(BuildContext context, String name, String mobileNo,
       String bankAccNo, String bio) {
-      
     // set up the buttons
     IconButton cancelButton = IconButton(
       icon: const Icon(Icons.cancel),
@@ -171,7 +170,7 @@ class EditUser extends StatelessWidget {
           "mobileNo": mobileNo,
           "bankAccNo": bankAccNo,
           "bio": bio,
-          "bookmarks": {},
+          "dp": user.photoUrl,
         }).then((value) => Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => MyAccountPage(user, googleSignIn))));
       },
