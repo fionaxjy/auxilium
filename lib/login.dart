@@ -48,7 +48,6 @@ class LoginState extends State<LoginPage> {
     }
   }
 
-// SAME AS LINES 72-81, CREATES MULTIPLE PAGES. PROBLEM
   createUserInFirestore() async {
     final DocumentSnapshot doc = await usersRef.doc(_currentUser.id).get();
     if (!doc.exists) {
@@ -70,12 +69,7 @@ class LoginState extends State<LoginPage> {
     GoogleSignInAccount user = _currentUser;
 
     if (user != null) {
-      // FIONA PLEASE RESOLVE THIS !!!!!!
-      /*if (!userHasData()) {
-        return CreateUser(user, _googleSignIn);
-      }
-      */
-      return CreateUser(user, _googleSignIn);
+      return MyAccountPage(user, _googleSignIn);
     } else {
       return signInPage();
     }
