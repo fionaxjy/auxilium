@@ -1,15 +1,17 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'home_button.dart';
-import 'login.dart';
 import 'my_account_page.dart';
 import 'navbar.dart';
 
 class EditUser extends StatelessWidget {
   final GoogleSignInAccount user;
   final GoogleSignIn googleSignIn;
+  final CollectionReference usersRef =
+      FirebaseFirestore.instance.collection('Users');
 
-  const EditUser(this.user, this.googleSignIn, {Key key}) : super(key: key);
+  EditUser(this.user, this.googleSignIn, {Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,98 +36,164 @@ class EditUser extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
-            TextFormField(
-              initialValue: user.displayName,
-              maxLength: 30,
-              onChanged: (text) {
-                tempName = text;
+            // Name Entry
+            FutureBuilder<DocumentSnapshot>(
+              future: usersRef.doc(user.id).get(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<DocumentSnapshot> snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  Map<String, dynamic> data =
+                      snapshot.data.data() as Map<String, dynamic>;
+                  tempName = "${data['name']}";
+                  return TextFormField(
+                    initialValue: "${data['name']}",
+                    maxLength: 30,
+                    onChanged: (text) {
+                      tempName = text;
+                    },
+                    decoration: const InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Color.fromARGB(255, 65, 82, 31)),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Color.fromARGB(255, 65, 82, 31)),
+                        ),
+                        filled: true,
+                        fillColor: Colors.white,
+                        labelText: 'Name',
+                        hintText: 'How you want to be addressed',
+                        labelStyle:
+                            TextStyle(color: Color.fromARGB(255, 65, 82, 31))),
+                  );
+                }
+                return const Text(
+                  "loading...",
+                );
               },
-              decoration: const InputDecoration(
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide:
-                        BorderSide(color: Color.fromARGB(255, 65, 82, 31)),
-                  ),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide:
-                        BorderSide(color: Color.fromARGB(255, 65, 82, 31)),
-                  ),
-                  filled: true,
-                  fillColor: Colors.white,
-                  labelText: 'Name',
-                  hintText: 'How you want to be addressed',
-                  labelStyle:
-                      TextStyle(color: Color.fromARGB(255, 65, 82, 31))),
             ),
-            TextFormField(
-              maxLength: 8,
-              keyboardType: TextInputType.phone,
-              onChanged: (mobileNo) {
-                tempMobile = mobileNo;
+
+            // Mobile No Entry
+            FutureBuilder<DocumentSnapshot>(
+              future: usersRef.doc(user.id).get(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<DocumentSnapshot> snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  Map<String, dynamic> data =
+                      snapshot.data.data() as Map<String, dynamic>;
+                  tempMobile = "${data['mobileNo']}";
+                  return TextFormField(
+                    initialValue: "${data['mobileNo']}",
+                    maxLength: 8,
+                    keyboardType: TextInputType.phone,
+                    onChanged: (mobileNo) {
+                      tempMobile = mobileNo;
+                    },
+                    decoration: const InputDecoration(
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Color.fromARGB(255, 65, 82, 31)),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Color.fromARGB(255, 65, 82, 31)),
+                      ),
+                      filled: true,
+                      fillColor: Colors.white,
+                      suffixIcon: Icon(Icons.phone),
+                      labelText: 'Mobile Number',
+                      hintText: 'Used for Paylah/PayNow',
+                      labelStyle:
+                          TextStyle(color: Color.fromARGB(255, 65, 82, 31)),
+                    ),
+                  );
+                }
+                return const Text("loading...");
               },
-              decoration: const InputDecoration(
-                enabledBorder: UnderlineInputBorder(
-                  borderSide:
-                      BorderSide(color: Color.fromARGB(255, 65, 82, 31)),
-                ),
-                focusedBorder: UnderlineInputBorder(
-                  borderSide:
-                      BorderSide(color: Color.fromARGB(255, 65, 82, 31)),
-                ),
-                filled: true,
-                fillColor: Colors.white,
-                suffixIcon: Icon(Icons.phone),
-                labelText: 'Mobile Number',
-                hintText: 'Used for Paylah/PayNow',
-                labelStyle: TextStyle(color: Color.fromARGB(255, 65, 82, 31)),
-              ),
             ),
-            TextFormField(
-              maxLength: 16,
-              keyboardType: TextInputType.number,
-              onChanged: (accNo) {
-                tempBank = accNo;
+            // BankAccNo Entry
+            FutureBuilder<DocumentSnapshot>(
+              future: usersRef.doc(user.id).get(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<DocumentSnapshot> snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  Map<String, dynamic> data =
+                      snapshot.data.data() as Map<String, dynamic>;
+                  tempBank = "${data['bankAccNo']}";
+                  return TextFormField(
+                    initialValue: "${data['bankAccNo']}",
+                    maxLength: 16,
+                    keyboardType: TextInputType.number,
+                    onChanged: (accNo) {
+                      tempBank = accNo;
+                    },
+                    decoration: const InputDecoration(
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Color.fromARGB(255, 65, 82, 31)),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Color.fromARGB(255, 65, 82, 31)),
+                      ),
+                      filled: true,
+                      fillColor: Colors.white,
+                      suffixIcon: Icon(Icons.account_balance_wallet),
+                      labelText: 'Bank Account Number',
+                      hintText: '1234 5678 9098 7654',
+                      labelStyle:
+                          TextStyle(color: Color.fromARGB(255, 65, 82, 31)),
+                    ),
+                  );
+                }
+                return const Text("loading...");
               },
-              decoration: const InputDecoration(
-                enabledBorder: UnderlineInputBorder(
-                  borderSide:
-                      BorderSide(color: Color.fromARGB(255, 65, 82, 31)),
-                ),
-                focusedBorder: UnderlineInputBorder(
-                  borderSide:
-                      BorderSide(color: Color.fromARGB(255, 65, 82, 31)),
-                ),
-                filled: true,
-                fillColor: Colors.white,
-                suffixIcon: Icon(Icons.account_balance_wallet),
-                labelText: 'Bank Account Number',
-                hintText: '1234 5678 9098 7654',
-                labelStyle: TextStyle(color: Color.fromARGB(255, 65, 82, 31)),
-              ),
             ),
-            TextFormField(
-              maxLength: 150,
-              onChanged: (bio) {
-                // ADD
-                tempBio = bio;
+
+            // Bio Entry
+            FutureBuilder<DocumentSnapshot>(
+              //Fetching data from the documentId specified of the user
+              future: usersRef.doc(user.id).get(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<DocumentSnapshot> snapshot) {
+                //Data is output to the user
+                if (snapshot.connectionState == ConnectionState.done) {
+                  Map<String, dynamic> data =
+                      snapshot.data.data() as Map<String, dynamic>;
+                  tempBio = "${data['bio']}";
+                  return TextFormField(
+                    maxLength: 150,
+                    onChanged: (bio) {
+                      tempBio = bio;
+                    },
+                    initialValue: "${data['bio']}",
+                    decoration: const InputDecoration(
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Color.fromARGB(255, 65, 82, 31)),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Color.fromARGB(255, 65, 82, 31)),
+                      ),
+                      filled: true,
+                      fillColor: Colors.white,
+                      suffixIcon: Icon(Icons.person),
+                      labelText: 'Bio',
+                      hintText: 'About yourself',
+                      labelStyle:
+                          TextStyle(color: Color.fromARGB(255, 65, 82, 31)),
+                    ),
+                  );
+                }
+
+                return const Text(
+                  "loading...",
+                );
               },
-              //initialValue:
-              decoration: const InputDecoration(
-                enabledBorder: UnderlineInputBorder(
-                  borderSide:
-                      BorderSide(color: Color.fromARGB(255, 65, 82, 31)),
-                ),
-                focusedBorder: UnderlineInputBorder(
-                  borderSide:
-                      BorderSide(color: Color.fromARGB(255, 65, 82, 31)),
-                ),
-                filled: true,
-                fillColor: Colors.white,
-                suffixIcon: Icon(Icons.person),
-                labelText: 'Bio',
-                hintText: 'About yourself',
-                labelStyle: TextStyle(color: Color.fromARGB(255, 65, 82, 31)),
-              ),
             ),
+
             Row(children: <Widget>[
               IconButton(
                   onPressed: () {

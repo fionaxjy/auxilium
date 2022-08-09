@@ -1,7 +1,7 @@
 import 'package:auxilium/edit_user.dart';
 import 'package:auxilium/login.dart';
 import 'package:auxilium/navbar.dart';
-import 'package:auxilium/post%20viewers/comm_post_viewer.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -23,6 +23,15 @@ class MyAccountPageState extends State<MyAccountPage> {
   bool isRequesting = true;
   bool isDonating = false;
   // bool isBookmarks = false;
+  TextStyle nameTextStyle = const TextStyle(
+    color: Color.fromARGB(255, 65, 82, 31),
+    fontSize: 18,
+  );
+  TextStyle bioTextStyle = const TextStyle(
+    color: Color.fromARGB(255, 65, 82, 31),
+    fontSize: 14,
+  );
+  CollectionReference usersRef = FirebaseFirestore.instance.collection('Users');
 
   @override
   Widget build(BuildContext context) {
@@ -54,9 +63,6 @@ class MyAccountPageState extends State<MyAccountPage> {
               Column(
                 children: <Widget>[
                   const SizedBox(height: 20),
-                  /*GoogleUserCircleAvatar(
-            identity: user,
-          ),*/
 
                   Stack(
                     alignment: const FractionalOffset(1.2, 1.22),
@@ -107,27 +113,46 @@ class MyAccountPageState extends State<MyAccountPage> {
                   const SizedBox(height: 20),
 
                   // name
-                  Text(widget.user.displayName ?? '',
-                      style: const TextStyle(
-                        color: Color.fromARGB(255, 65, 82, 31),
-                        fontSize: 18,
-                      ),
-                      textAlign: TextAlign.center),
-                  const SizedBox(
-                    height: 16,
+                  FutureBuilder<DocumentSnapshot>(
+                    //Fetching data from the documentId specified of the user
+                    future: usersRef.doc(widget.user.id).get(),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<DocumentSnapshot> snapshot) {
+                      //Error Handling conditions
+                      if (snapshot.hasError) {
+                        return Text("user data error",
+                            style: bioTextStyle, textAlign: TextAlign.center);
+                      }
+
+                      if (snapshot.hasData && !snapshot.data.exists) {
+                        return Text("user does not exist",
+                            style: bioTextStyle, textAlign: TextAlign.center);
+                      }
+
+                      //Data is output to the user
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        Map<String, dynamic> data =
+                            snapshot.data.data() as Map<String, dynamic>;
+                        return Column(children: [
+                          Text("${data['name']}",
+                              style: nameTextStyle,
+                              textAlign: TextAlign.center),
+                          const SizedBox(
+                            height: 16,
+                          ),
+                          SizedBox(
+                            width: 300,
+                            child: Text("${data['bio']}"),
+                          ),
+                        ]);
+                      }
+
+                      return Text("loading...",
+                          style: bioTextStyle, textAlign: TextAlign.center);
+                    },
                   ),
-                  const SizedBox(
-                    width: 300,
-                    child: Text(
-                        // PLACEHOLDER TEXT FOR BIO INPUT
-                        'Software Engineer | Mother of 5 | Life, Laugh, Love',
-                        style: TextStyle(
-                          color: Color.fromARGB(255, 65, 82, 31),
-                          fontSize: 12,
-                        ),
-                        textAlign: TextAlign.center),
-                  ),
-                  const SizedBox(height: 26),
+
+                  const SizedBox(height: 14),
 
                   // menu buttons
                   Row(

@@ -46,7 +46,7 @@ class NotificationsPageState extends State<NotificationsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 168, 159, 104),
+      backgroundColor: Colors.white,
       appBar: AppBar(
           elevation: 0,
           centerTitle: true,
@@ -59,7 +59,13 @@ class NotificationsPageState extends State<NotificationsPage> {
         future: getNotifications(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return const CircularProgressIndicator();
+            return const Center(
+                child: Text(
+              'no new notifications at the moment.\nstart interacting!',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  color: Color.fromARGB(255, 65, 82, 31), fontSize: 18),
+            ));
           }
           return ListView(
             children: snapshot.data,
