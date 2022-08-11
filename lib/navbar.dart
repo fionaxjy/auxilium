@@ -1,5 +1,7 @@
 import 'package:auxilium/causes_page.dart';
 import 'package:auxilium/community_page.dart';
+import 'package:auxilium/create%20post/money_create_post.dart';
+import 'package:auxilium/create%20post/resource_create_post.dart';
 import 'package:auxilium/my_account_page.dart';
 import 'package:auxilium/notifications_page.dart';
 import 'package:auxilium/alerts.dart';
@@ -37,7 +39,9 @@ Widget buildNavBar(
             icon: const Icon(Icons.add_circle_outline),
             color: const Color.fromARGB(255, 65, 82, 31),
             onPressed: () {
-              reqDonPostAlert(context, user, googleSignIn);
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) =>
+                      resourceTypePostAlert(context, user, googleSignIn)));
             }),
         label: '',
       ),

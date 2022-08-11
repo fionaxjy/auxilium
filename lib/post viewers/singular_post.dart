@@ -22,8 +22,9 @@ class SingularPostState extends State<SingularPost> {
 
   Widget meetRequestButton() {
     return ElevatedButton(
-        onPressed: reqDonContributionAlert(
-            context, widget.myUser, widget.googleSignIn),
+        onPressed: () {
+          // *** PAYMENT POPUP ***
+        },
         child: const Text('Meet Request'));
   }
 

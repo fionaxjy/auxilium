@@ -1,3 +1,4 @@
+import 'package:auxilium/community_page.dart';
 import 'package:auxilium/create%20post/resource_create_post.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,53 +7,20 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'create post/money_create_post.dart';
 import 'package:auxilium/payment.dart';
 
-// From Create Post
-// (1) Request or Donation?
-reqDonPostAlert(
+// From NAVBAR -> Create Post
+// Money or Resource?
+resourceTypePostAlert(
     BuildContext context, GoogleSignInAccount user, GoogleSignIn googleSignIn) {
   showCupertinoModalPopup<void>(
     context: context,
     builder: (BuildContext context) => CupertinoAlertDialog(
-      title: const Text('Will you be making a Donation or Request?'),
+      title: Text('Is this a Monetary or Resource?'),
       actions: <CupertinoDialogAction>[
         CupertinoDialogAction(
           onPressed: () {
             Navigator.pop(context);
             Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => resourceTypePostAlert(
-                    context, user, googleSignIn, 'Donation')));
-          },
-          child: const Text('Donation'),
-        ),
-        CupertinoDialogAction(
-          onPressed: () {
-            Navigator.pop(context);
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => resourceTypePostAlert(
-                    context, user, googleSignIn, 'Request')));
-          },
-          child: const Text('Request'),
-        )
-      ],
-    ),
-  );
-}
-
-// From Create Post
-// (2) Money or Resource?
-resourceTypePostAlert(BuildContext context, GoogleSignInAccount user,
-    GoogleSignIn googleSignIn, String donReqType) {
-  showCupertinoModalPopup<void>(
-    context: context,
-    builder: (BuildContext context) => CupertinoAlertDialog(
-      title: Text('Is this a monetary or resource $donReqType?'),
-      actions: <CupertinoDialogAction>[
-        CupertinoDialogAction(
-          onPressed: () {
-            Navigator.pop(context);
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) =>
-                    CreateMoneyPost(user, googleSignIn, donReqType)));
+                builder: (context) => CreateMoneyPost(user, googleSignIn)));
           },
           child: const Text('Monetary'),
         ),
@@ -60,41 +28,9 @@ resourceTypePostAlert(BuildContext context, GoogleSignInAccount user,
           onPressed: () {
             Navigator.pop(context);
             Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) =>
-                    CreateResourcePost(user, googleSignIn, donReqType)));
+                builder: (context) => CreateResourcePost(user, googleSignIn)));
           },
           child: const Text('Resources'),
-        )
-      ],
-    ),
-  );
-}
-
-// From Community Post Viewer
-reqDonContributionAlert(
-    BuildContext context, GoogleSignInAccount user, GoogleSignIn googleSignIn) {
-  showCupertinoModalPopup<void>(
-    context: context,
-    builder: (BuildContext context) => CupertinoAlertDialog(
-      title: const Text('Will you be making a Donation or Request?'),
-      actions: <CupertinoDialogAction>[
-        CupertinoDialogAction(
-          onPressed: () {
-            Navigator.pop(context);
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => resourceTypePostAlert(context, user,
-                    googleSignIn, 'Donation'))); // *** EDIT ACCORDINGLY ***
-          },
-          child: const Text('Donation'),
-        ),
-        CupertinoDialogAction(
-          onPressed: () {
-            Navigator.pop(context);
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) =>
-                    paymentAmtAlert(context, user, googleSignIn)));
-          },
-          child: const Text('Request'),
         )
       ],
     ),

@@ -1,21 +1,28 @@
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:quantity_input/quantity_input.dart';
+import '../community_page.dart';
 import '../post_comments.dart';
 import '../home_button.dart';
 import '../navbar.dart';
+import 'package:intl/intl.dart';
 
 // FINANCE POST does NOT contain collection method, item condition, and contains DOUBLE quantity input
 
 final postsRef = FirebaseFirestore.instance.collection('Posts');
 final DateTime timestamp = DateTime.now();
+final formatCurrency =
+    NumberFormat.simpleCurrency(locale: Platform.localeName, name: 'SGD');
 
 class CreateMoneyPost extends StatefulWidget {
   final GoogleSignInAccount user;
   final GoogleSignIn googleSignIn;
-  final String reqOrDonTag;
-  const CreateMoneyPost(this.user, this.googleSignIn, this.reqOrDonTag,
-      {Key key})
+  const CreateMoneyPost(this.user, this.googleSignIn, {Key key})
       : super(key: key);
 
   @override
@@ -23,22 +30,22 @@ class CreateMoneyPost extends StatefulWidget {
 }
 
 class CreateMoneyPostState extends State<CreateMoneyPost> {
-  String selectedTag = 'Tags';
-  String tempTitle;
-  String tempContent;
+  String selectedTag = 'tags';
+  String tempTitle = '';
+  String tempContent = '';
   DateTime dateAndTime = timestamp;
-  // Add into db quantity
-  // double tempQuantity;
+  double tempQuantity = 0;
+  String reqOrDonTag = 'req';
 
   final causeList = const [
-    'Tags',
-    'Food',
-    'Healthcare',
-    'Space',
-    'Utilities',
-    'Clothes',
-    'Education',
-    'Others'
+    'tags',
+    'food',
+    'healthcare',
+    'space',
+    'utilities',
+    'clothes',
+    'education',
+    'others'
   ];
 
   @override
@@ -52,20 +59,21 @@ class CreateMoneyPostState extends State<CreateMoneyPost> {
               "condition": null,
               "title": tempTitle,
               "content": tempContent,
-              "reqOrDonTag": widget.reqOrDonTag,
+              "reqOrDonTag": reqOrDonTag,
               "dateAndTime": timestamp,
-              // "quantity" : tempQuantity,
-            }).then((value) => showComments(
+              "quantity": tempQuantity,
+            }).then(
+                /*(value) => showComments(
                   widget.user,
                   widget.googleSignIn,
                   context,
                   postId: value.id,
                   userId: widget.user.id,
                   userDp: widget.user.photoUrl,
-                ));
-            // (value) =>  Navigator.of(context).push(MaterialPageRoute(
-            //     builder: (context) =>
-            //         CommunityPage(widget.user, widget.googleSignIn))));
+                ));*/
+                (value) => Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) =>
+                        CommunityPage(widget.user, widget.googleSignIn))));
           },
           child: const Padding(
               padding: EdgeInsets.only(right: 8),
@@ -103,29 +111,175 @@ class CreateMoneyPostState extends State<CreateMoneyPost> {
         bottomNavigationBar:
             buildNavBar(context, widget.user, widget.googleSignIn),
         body: Padding(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(15),
           child: Column(
             children: [
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: DropdownButtonHideUnderline(
                     child: Row(children: [
-                  const Icon(Icons.discount),
-                  const SizedBox(
-                    width: 10,
+                  const Icon(
+                    Icons.discount,
+                    size: 18,
                   ),
-                  DropdownButton<String>(
-                    value: selectedTag,
-                    elevation: 2,
-                    items: causeList.map(buildMenuItem).toList(),
-                    onChanged: (select) => setState(() => selectedTag = select),
+                  const SizedBox(
+                    width: 12,
+                  ),
+                  Expanded(
+                    child: DropdownButton<String>(
+                      isExpanded: true,
+                      value: selectedTag,
+                      elevation: 2,
+                      items: causeList.map(buildMenuItem).toList(),
+                      onChanged: (select) =>
+                          setState(() => selectedTag = select),
+                    ),
                   ),
                 ])),
               ),
 
+              const Divider(
+                height: 5,
+              ),
+
+              // Quantity Indicator (double)
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: const [
+                          Icon(
+                            Icons.attach_money,
+                            size: 18,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            "amount:",
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ],
+                      ),
+                      Row(children: [
+                        Text(
+                          formatCurrency.format(tempQuantity),
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 18),
+                        ),
+                        IconButton(
+                            onPressed: () {
+                              showModalBottomSheet(
+                                context: context,
+                                builder: (context) {
+                                  return Column(children: [
+                                    const Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 20),
+                                      child: Center(
+                                          child: Text(
+                                        'enter amount',
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.black87),
+                                      )),
+                                    ),
+                                    TextFormField(
+                                      keyboardType: TextInputType.number,
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 40,
+                                          color:
+                                              Color.fromARGB(255, 65, 82, 31)),
+                                      decoration: const InputDecoration(
+                                        border: InputBorder.none,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                      initialValue:
+                                          formatCurrency.format(tempQuantity),
+                                      onChanged: (value) => setState(() =>
+                                          tempQuantity = double.parse(
+                                              value.replaceAll('\$', ''))),
+                                      // *** ISSUE WITH DECIMAL PLACES, IF INPUT IS 0.001, DATABASE REFLECTS 0.001 INSTEAD OF ROUNDING UP ***
+                                      autofocus: true,
+                                    )
+                                  ]);
+                                },
+                              );
+                            },
+                            icon: const Icon(
+                              Icons.edit,
+                              size: 18,
+                              color: Color.fromARGB(255, 97, 97, 97),
+                            ))
+                      ])
+                    ]),
+              ),
+
+              const Divider(
+                height: 10,
+              ),
+
+// REQ/DON TAG
+              Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+                // REQUESTS
+                TextButton(
+                    style: TextButton.styleFrom(
+                      minimumSize: Size.zero,
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        reqOrDonTag = "req";
+                      });
+                    },
+                    child: Text(
+                      'request',
+                      style: reqOrDonTag == "req"
+                          ? const TextStyle(
+                              color: Color.fromARGB(255, 65, 82, 31),
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600)
+                          : const TextStyle(
+                              color: Color.fromARGB(255, 245, 195, 150),
+                              fontSize: 16),
+                    )),
+
+                //Donating
+                TextButton(
+                  style: TextButton.styleFrom(
+                    minimumSize: Size.zero,
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      reqOrDonTag = "don";
+                    });
+                  },
+                  child: Text('donation',
+                      style: reqOrDonTag != "req"
+                          ? const TextStyle(
+                              color: Color.fromARGB(255, 65, 82, 31),
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            )
+                          : const TextStyle(
+                              color: Color.fromARGB(255, 245, 195, 150),
+                              fontSize: 16)),
+                ),
+              ]),
+
+              const Divider(
+                height: 5,
+              ),
+
               // Title
-              TextField(
+              TextFormField(
                 style: const TextStyle(fontSize: 18),
+                initialValue: tempTitle,
                 maxLength: 10,
                 onChanged: (content) {
                   tempTitle = content;
@@ -138,15 +292,16 @@ class CreateMoneyPostState extends State<CreateMoneyPost> {
                     fillColor: Colors.white,
                     alignLabelWithHint: true,
                     hintText: 'insert post title...',
-                    hintStyle: TextStyle(fontSize: 18)),
+                    hintStyle: TextStyle(fontSize: 18, color: Colors.black54)),
                 keyboardType: TextInputType.multiline,
                 maxLines: 1,
                 autofocus: true,
               ),
 
               // Post
-              TextField(
+              TextFormField(
                 style: const TextStyle(fontSize: 16),
+                initialValue: tempContent,
                 maxLength: 1200,
                 onChanged: (content) {
                   tempContent = content;
@@ -158,16 +313,12 @@ class CreateMoneyPostState extends State<CreateMoneyPost> {
                     filled: true,
                     fillColor: Colors.white,
                     alignLabelWithHint: true,
-                    labelText: 'My Post',
                     hintText: 'insert description here...',
-                    hintStyle: TextStyle(fontSize: 18)),
+                    hintStyle: TextStyle(fontSize: 18, color: Colors.black38)),
                 keyboardType: TextInputType.multiline,
                 maxLines: 22,
                 autofocus: true,
               ),
-
-              // Quantity Indicator (double)
-              // *** ADD ***
             ],
           ),
         ));

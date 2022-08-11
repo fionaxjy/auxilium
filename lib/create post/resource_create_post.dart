@@ -1,11 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import '../community_page.dart';
 import '../post_comments.dart';
 import '../home_button.dart';
 import '../navbar.dart';
+import 'package:quantity_input/quantity_input.dart';
 
 // RESOURCE POST contains INTEGER only quantity input
+
+// Problem with text input and dropdown menu state changes
+// Add validators -> no unselected tags, no empty titles or post bodies
 
 final postsRef = FirebaseFirestore.instance.collection('Posts');
 final DateTime timestamp = DateTime.now();
@@ -13,9 +18,8 @@ final DateTime timestamp = DateTime.now();
 class CreateResourcePost extends StatefulWidget {
   final GoogleSignInAccount user;
   final GoogleSignIn googleSignIn;
-  final String reqOrDonTag;
-  const CreateResourcePost(this.user, this.googleSignIn, this.reqOrDonTag,
-      {Key key})
+
+  const CreateResourcePost(this.user, this.googleSignIn, {Key key})
       : super(key: key);
 
   @override
@@ -26,11 +30,11 @@ class CreateResourcePostState extends State<CreateResourcePost> {
   String selectedTag = 'Tags';
   String selectedCol = 'Select Collection Method';
   String selectedCond = 'Item Condition';
-  String tempTitle;
-  String tempContent;
+  String tempTitle = '';
+  String tempContent = '';
+  String reqOrDonTag = 'req';
   DateTime dateAndTime = timestamp;
-  // Add into db quantity
-  // int tempQuantity;
+  int tempQuantity = 1;
 
   final causeList = const [
     'Tags',
@@ -69,20 +73,21 @@ class CreateResourcePostState extends State<CreateResourcePost> {
               "condition": selectedCond,
               "title": tempTitle,
               "content": tempContent,
-              "reqOrDonTag": widget.reqOrDonTag,
+              "reqOrDonTag": reqOrDonTag,
               "dateAndTime": timestamp,
-              // "quantity" : tempQuantity,
-            }).then((value) => showComments(
+              "quantity": tempQuantity,
+            }).then(
+                /*(value) => showComments(
                   widget.user,
                   widget.googleSignIn,
                   context,
                   postId: value.id,
                   userId: widget.user.id,
                   userDp: widget.user.photoUrl,
-                ));
-            // (value) =>  Navigator.of(context).push(MaterialPageRoute(
-            //     builder: (context) =>
-            //         CommunityPage(widget.user, widget.googleSignIn))));
+                ));*/
+                (value) => Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) =>
+                        CommunityPage(widget.user, widget.googleSignIn))));
           },
           child: const Padding(
               padding: EdgeInsets.only(right: 8),
@@ -120,7 +125,7 @@ class CreateResourcePostState extends State<CreateResourcePost> {
         bottomNavigationBar:
             buildNavBar(context, widget.user, widget.googleSignIn),
         body: Padding(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(15),
           child: Column(
             children: [
               Container(
@@ -131,19 +136,80 @@ class CreateResourcePostState extends State<CreateResourcePost> {
                   const SizedBox(
                     width: 10,
                   ),
-                  DropdownButton<String>(
-                    value: selectedTag,
-                    elevation: 2,
-                    items: causeList.map(buildMenuItem).toList(),
-                    onChanged: (select) => setState(() => selectedTag = select),
-                  ),
+                  Expanded(
+                    child: DropdownButton<String>(
+                      isExpanded: true,
+                      value: selectedTag,
+                      elevation: 2,
+                      items: causeList.map(buildMenuItem).toList(),
+                      onChanged: (select) =>
+                          setState(() => selectedTag = select),
+                    ),
+                  )
                 ])),
               ),
 
+              const Divider(
+                height: 5,
+              ),
+// REQ/DON TAG
+              Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+                // REQUESTS
+                TextButton(
+                    style: TextButton.styleFrom(
+                      minimumSize: Size.zero,
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        reqOrDonTag = "req";
+                      });
+                    },
+                    child: Text(
+                      'request',
+                      style: reqOrDonTag == "req"
+                          ? const TextStyle(
+                              color: Color.fromARGB(255, 65, 82, 31),
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600)
+                          : const TextStyle(
+                              color: Color.fromARGB(255, 245, 195, 150),
+                              fontSize: 16),
+                    )),
+
+                //Donating
+                TextButton(
+                  style: TextButton.styleFrom(
+                    minimumSize: Size.zero,
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      reqOrDonTag = "don";
+                    });
+                  },
+                  child: Text('donation',
+                      style: reqOrDonTag != "req"
+                          ? const TextStyle(
+                              color: Color.fromARGB(255, 65, 82, 31),
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            )
+                          : const TextStyle(
+                              color: Color.fromARGB(255, 245, 195, 150),
+                              fontSize: 16)),
+                ),
+              ]),
+
+              Divider(
+                height: 5,
+              ),
+
               // Title
-              TextField(
-                style: const TextStyle(fontSize: 18),
-                maxLength: 10,
+              TextFormField(
+                style: const TextStyle(fontSize: 18, height: 1.4),
+                maxLength: 150,
+                initialValue: tempTitle,
                 onChanged: (content) {
                   tempTitle = content;
                 },
@@ -162,9 +228,10 @@ class CreateResourcePostState extends State<CreateResourcePost> {
               ),
 
               // Post
-              TextField(
-                style: const TextStyle(fontSize: 16),
+              TextFormField(
+                style: const TextStyle(fontSize: 17),
                 maxLength: 1200,
+                initialValue: tempContent,
                 onChanged: (content) {
                   tempContent = content;
                 },
@@ -179,8 +246,34 @@ class CreateResourcePostState extends State<CreateResourcePost> {
                     hintText: 'insert description here...',
                     hintStyle: TextStyle(fontSize: 18)),
                 keyboardType: TextInputType.multiline,
-                maxLines: 22,
+                maxLines: 16,
                 autofocus: true,
+              ),
+
+// Quantity Indicator (integer)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: const [
+                          Icon(Icons.numbers),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            "Quantity: ",
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ],
+                      ),
+                      QuantityInput(
+                          value: tempQuantity,
+                          buttonColor: const Color.fromARGB(255, 65, 82, 31),
+                          onChanged: (value) => setState(() => tempQuantity =
+                              int.parse(value.replaceAll(',', '')))),
+                    ]),
               ),
 
               // Collection Method
@@ -219,9 +312,6 @@ class CreateResourcePostState extends State<CreateResourcePost> {
                   ),
                 ])),
               ),
-
-              // Quantity Indicator (integer)
-              // *** ADD ***
             ],
           ),
         ));

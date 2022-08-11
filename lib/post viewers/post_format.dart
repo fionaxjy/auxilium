@@ -115,7 +115,7 @@ class Post extends StatelessWidget {
         margin: const EdgeInsets.all(6.0),
         child: Text(
           comments,
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.black45,
             fontSize: 14.0,
           ),
