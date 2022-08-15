@@ -21,17 +21,9 @@ class NotificationsPage extends StatefulWidget {
 }
 
 class NotificationsPageState extends State<NotificationsPage> {
-  final GoogleSignInAccount user;
-  final GoogleSignIn googleSignIn;
-
-  NotificationsPageState({
-    this.user,
-    this.googleSignIn,
-  });
-
   getNotifications() async {
     QuerySnapshot snapshot = await notificationsRef
-        .doc(user.id)
+        .doc(widget.user.id)
         .collection('Notifications')
         .orderBy('timestamp', descending: true)
         .limit(50)
@@ -54,14 +46,14 @@ class NotificationsPageState extends State<NotificationsPage> {
               style: TextStyle(
                   color: Color.fromARGB(255, 65, 82, 31), fontSize: 28)),
           backgroundColor: const Color.fromARGB(255, 245, 253, 198),
-          leading: homeButton(context, user, googleSignIn)),
+          leading: homeButton(context, widget.user, widget.googleSignIn)),
       body: FutureBuilder(
         future: getNotifications(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Center(
                 child: Text(
-              'no new notifications at the moment.\nstart interacting!',
+              'no notifications at the moment.\nstart interacting!',
               textAlign: TextAlign.center,
               style: TextStyle(
                   color: Color.fromARGB(255, 65, 82, 31), fontSize: 18),
@@ -72,7 +64,8 @@ class NotificationsPageState extends State<NotificationsPage> {
           );
         },
       ),
-      bottomNavigationBar: buildNavBar(context, user, googleSignIn),
+      bottomNavigationBar:
+          buildNavBar(context, widget.user, widget.googleSignIn),
     );
   }
 }
@@ -101,7 +94,7 @@ class NotificationsItem extends StatelessWidget {
   factory NotificationsItem.fromDoc(DocumentSnapshot doc) {
     return NotificationsItem(
       userId: doc['userId'],
-      //userDp: doc['userDp'],
+      userDp: doc['userDp'],
       postId: doc['postId'],
       commentData: doc['content'],
       timestamp: doc['timestamp'],
@@ -126,14 +119,19 @@ class NotificationsItem extends StatelessWidget {
               onTap: () => print('show profile'), // post viewer
               child: RichText(
                 overflow: TextOverflow.ellipsis,
-                text: TextSpan(style: const TextStyle(fontSize: 14), children: [
-                  TextSpan(
-                    text: ' $notificationItemText',
-                  ),
-                ]),
+                text: TextSpan(
+                    style: const TextStyle(
+                        fontSize: 16,
+                        color: Color.fromARGB(255, 65, 82, 31),
+                        fontFamily: 'AltonaSans'),
+                    children: [
+                      TextSpan(
+                        text: '$notificationItemText',
+                      ),
+                    ]),
               ),
             ),
-            //leading: CircleAvatar(backgroundImage: NetworkImage(userDp)),
+            leading: CircleAvatar(backgroundImage: NetworkImage(userDp)),
             subtitle: Text(
               timeago.format(timestamp.toDate()),
               overflow: TextOverflow.ellipsis,

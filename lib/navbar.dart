@@ -38,11 +38,8 @@ Widget buildNavBar(
         icon: IconButton(
             icon: const Icon(Icons.add_circle_outline),
             color: const Color.fromARGB(255, 65, 82, 31),
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) =>
-                      resourceTypePostAlert(context, user, googleSignIn)));
-            }),
+            onPressed: () =>
+                resourceTypePostAlert(context, user, googleSignIn)),
         label: '',
       ),
       BottomNavigationBarItem(

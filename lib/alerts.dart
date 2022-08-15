@@ -13,24 +13,22 @@ resourceTypePostAlert(
     BuildContext context, GoogleSignInAccount user, GoogleSignIn googleSignIn) {
   showCupertinoModalPopup<void>(
     context: context,
-    builder: (BuildContext context) => CupertinoAlertDialog(
-      title: Text('Is this a Monetary or Resource?'),
+    builder: (context) => CupertinoAlertDialog(
+      title: const Text('Are you donating/requesting Money or Resources?'),
       actions: <CupertinoDialogAction>[
         CupertinoDialogAction(
           onPressed: () {
-            Navigator.pop(context);
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => CreateMoneyPost(user, googleSignIn)));
           },
-          child: const Text('Monetary'),
+          child: const Text('Money'),
         ),
         CupertinoDialogAction(
           onPressed: () {
-            Navigator.pop(context);
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => CreateResourcePost(user, googleSignIn)));
           },
-          child: const Text('Resources'),
+          child: const Text('Resource'),
         )
       ],
     ),
@@ -41,23 +39,74 @@ final paymentCntroller = Get.put(PaymentController()); // payment link
 
 paymentAmtAlert(
     BuildContext context, GoogleSignInAccount user, GoogleSignIn googleSignIn) {
-  String tempAmount;
-  showCupertinoModalPopup<void>(
+  String tempAmount = '0';
+
+  showModalBottomSheet(
     context: context,
-    builder: (BuildContext context) => CupertinoTextFormFieldRow(
-      prefix: const Text('How much will you be donating?'),
-      validator: (String amount) {
-        return (amount != null) ? 'Enter a donation greater than \$0.' : null;
-      },
-      placeholder: "USD\$123.45",
-      keyboardType: const TextInputType.numberWithOptions(decimal: true),
-      onFieldSubmitted: (String amount) {
-        tempAmount = amount;
-        paymentCntroller.makePayment(amount: tempAmount, currency: 'USD');
-      },
-    ),
+    builder: (context) {
+      return Column(children: [
+        const Padding(
+          padding: EdgeInsets.symmetric(vertical: 20),
+          child: Center(
+              child: Text(
+            'how much will you be donating?',
+            style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w500,
+                color: Colors.black87),
+          )),
+        ),
+        Center(
+            child: TextFormField(
+          style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 40,
+              color: Color.fromARGB(255, 65, 82, 31)),
+          decoration: const InputDecoration(
+            prefixIcon: Padding(
+                padding: EdgeInsets.fromLTRB(110, 3, 45, 3),
+                child: Text('\$',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 40,
+                      color: Color.fromARGB(255, 95, 95, 95),
+                    ))),
+            border: InputBorder.none,
+          ),
+          initialValue: tempAmount.toString(),
+          validator: (String amount) {
+            return (amount != null)
+                ? 'Enter a donation greater than \$0.'
+                : null;
+          },
+          keyboardType: const TextInputType.numberWithOptions(decimal: true),
+          onChanged: (String amount) {
+            tempAmount = amount;
+          },
+          autofocus: true,
+        )),
+        Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      paymentCntroller.makePayment(
+                          amount: tempAmount, currency: 'USD');
+                    },
+                    child: const Text(
+                      'submit',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 18),
+                    ),
+                  ),
+                ]))
+      ]);
+    },
   );
 }
+
 
 /* Alert dialog with  Column(children: [Text('what will you be contributing?'),
 

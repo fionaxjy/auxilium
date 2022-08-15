@@ -7,11 +7,13 @@ import '../navbar.dart';
 import 'post_format.dart';
 
 class SingularPost extends StatefulWidget {
-  final GoogleSignInAccount myUser;
+  final GoogleSignInAccount user;
   final GoogleSignIn googleSignIn;
-  final String postId; // Retrieve from db
-  const SingularPost(this.myUser, this.googleSignIn, this.postId, {Key key})
+  final Post post; // Retrieve from db
+
+  const SingularPost(this.user, this.googleSignIn, this.post, {Key key})
       : super(key: key);
+
   @override
   SingularPostState createState() => SingularPostState();
 }
@@ -39,12 +41,11 @@ class SingularPostState extends State<SingularPost> {
                 style: TextStyle(
                     color: Color.fromARGB(255, 65, 82, 31), fontSize: 28)),
             backgroundColor: const Color.fromARGB(255, 245, 253, 198),
-            leading: backButton(context, widget.myUser, widget.googleSignIn)),
+            leading: backButton(context, widget.user, widget.googleSignIn)),
         bottomNavigationBar:
-            buildNavBar(context, widget.myUser, widget.googleSignIn),
+            buildNavBar(context, widget.user, widget.googleSignIn),
         body: Column(
           children: [
-            // post image (if any) here
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [viewedPost.postDp(), viewedPost.postUser()],
@@ -53,7 +54,7 @@ class SingularPostState extends State<SingularPost> {
               Text(viewedPost.title),
             ]),
             // post tags
-            viewedPost.postBody(context, widget.postId),
+            viewedPost.postBody(context, viewedPost.postId),
             meetRequestButton(),
             const Divider(),
             const Text(

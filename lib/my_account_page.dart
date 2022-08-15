@@ -55,160 +55,157 @@ class MyAccountPageState extends State<MyAccountPage> {
           leading: homeButton(context, widget.user, widget.googleSignIn),
           actions: [signOutButton(context, widget.googleSignIn, widget.user)],
         ),
-        body: Column(children: [
-          Material(
-            color: const Color.fromARGB(255, 245, 253, 198),
-            elevation: 0.5,
-            child: Wrap(children: [
-              Column(
-                children: <Widget>[
-                  const SizedBox(height: 20),
+        body: FutureBuilder<DocumentSnapshot>(
+            //Fetching data from the documentId specified of the user
+            future: usersRef.doc(widget.user.id).get(),
+            builder: (BuildContext context,
+                AsyncSnapshot<DocumentSnapshot> snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                Map<String, dynamic> data =
+                    snapshot.data.data() as Map<String, dynamic>;
 
-                  Stack(
-                    alignment: const FractionalOffset(1.2, 1.22),
-                    children: <Widget>[
-                      InkWell(
-                        onTap: () => {},
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(100),
-                          child: CircleAvatar(
-                            foregroundImage: NetworkImage(widget.user.photoUrl),
-                            backgroundColor:
-                                const Color.fromARGB(255, 65, 82, 31),
-                            radius: 36,
-                            child: Text(getInitials(widget.user.displayName),
-                                style: const TextStyle(
-                                  color: Color.fromARGB(255, 245, 195, 150),
-                                  fontSize: 18,
-                                )),
+                return Column(children: [
+                  Material(
+                    color: const Color.fromARGB(255, 245, 253, 198),
+                    elevation: 0.5,
+                    child: Wrap(children: [
+                      Column(
+                        children: <Widget>[
+                          const SizedBox(height: 20),
+
+                          Stack(
+                            alignment: const FractionalOffset(1.2, 1.22),
+                            children: <Widget>[
+                              InkWell(
+                                onTap: () => {},
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(100),
+                                  child: CircleAvatar(
+                                    foregroundImage:
+                                        NetworkImage(widget.user.photoUrl),
+                                    backgroundColor:
+                                        const Color.fromARGB(255, 65, 82, 31),
+                                    radius: 36,
+                                    child: Text(
+                                        getInitials(widget.user.displayName),
+                                        style: const TextStyle(
+                                          color: Color.fromARGB(
+                                              255, 245, 195, 150),
+                                          fontSize: 18,
+                                        )),
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                height: 30,
+                                width: 30,
+                                decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.white,
+                                ),
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: IconButton(
+                                    icon: const Icon(
+                                      Icons.edit,
+                                      size: 16,
+                                      color: Color.fromARGB(255, 65, 82, 31),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (context) => EditUser(
+                                                  widget.user,
+                                                  widget.googleSignIn)));
+                                    },
+                                  ),
+                                ),
+                              )
+                            ],
                           ),
-                        ),
-                      ),
-                      Container(
-                        height: 30,
-                        width: 30,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.white,
-                        ),
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: IconButton(
-                            icon: const Icon(
-                              Icons.edit,
-                              size: 16,
-                              color: Color.fromARGB(255, 65, 82, 31),
+
+                          const SizedBox(height: 20),
+
+                          // name
+                          Column(children: [
+                            Text("${data['name']}",
+                                style: nameTextStyle,
+                                textAlign: TextAlign.center),
+                            const SizedBox(
+                              height: 16,
                             ),
-                            onPressed: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => EditUser(
-                                      widget.user, widget.googleSignIn)));
-                            },
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
+                            SizedBox(
+                              width: 300,
+                              child: Text(
+                                "${data['bio']}",
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ]),
 
-                  const SizedBox(height: 20),
+                          const SizedBox(height: 14),
 
-                  // name
-                  FutureBuilder<DocumentSnapshot>(
-                    //Fetching data from the documentId specified of the user
-                    future: usersRef.doc(widget.user.id).get(),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<DocumentSnapshot> snapshot) {
-                      //Error Handling conditions
-                      if (snapshot.hasError) {
-                        return Text("user data error",
-                            style: bioTextStyle, textAlign: TextAlign.center);
-                      }
+                          // menu buttons
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              // REQUESTS
+                              TextButton(
+                                  style: TextButton.styleFrom(
+                                    minimumSize: Size.zero,
+                                    tapTargetSize:
+                                        MaterialTapTargetSize.shrinkWrap,
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      isRequesting = true;
+                                      isDonating = false;
+                                      // isBookmarks = false;
+                                    });
+                                  },
+                                  child: Text(
+                                    'Requests',
+                                    style: isRequesting
+                                        ? const TextStyle(
+                                            color:
+                                                Color.fromARGB(255, 65, 82, 31),
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w600)
+                                        : const TextStyle(
+                                            color: Color.fromARGB(
+                                                255, 245, 195, 150),
+                                            fontSize: 16),
+                                  )),
 
-                      if (snapshot.hasData && !snapshot.data.exists) {
-                        return Text("user does not exist",
-                            style: bioTextStyle, textAlign: TextAlign.center);
-                      }
+                              //Donating
+                              TextButton(
+                                style: TextButton.styleFrom(
+                                  minimumSize: Size.zero,
+                                  tapTargetSize:
+                                      MaterialTapTargetSize.shrinkWrap,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    isRequesting = false;
+                                    isDonating = true;
+                                    // isBookmarks = false;
+                                  });
+                                },
+                                child: Text('Donations',
+                                    style: isDonating
+                                        ? const TextStyle(
+                                            color:
+                                                Color.fromARGB(255, 65, 82, 31),
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w600,
+                                          )
+                                        : const TextStyle(
+                                            color: Color.fromARGB(
+                                                255, 245, 195, 150),
+                                            fontSize: 16)),
+                              ),
 
-                      //Data is output to the user
-                      if (snapshot.connectionState == ConnectionState.done) {
-                        Map<String, dynamic> data =
-                            snapshot.data.data() as Map<String, dynamic>;
-                        return Column(children: [
-                          Text("${data['name']}",
-                              style: nameTextStyle,
-                              textAlign: TextAlign.center),
-                          const SizedBox(
-                            height: 16,
-                          ),
-                          SizedBox(
-                            width: 300,
-                            child: Text("${data['bio']}"),
-                          ),
-                        ]);
-                      }
-
-                      return Text("loading...",
-                          style: bioTextStyle, textAlign: TextAlign.center);
-                    },
-                  ),
-
-                  const SizedBox(height: 14),
-
-                  // menu buttons
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      // REQUESTS
-                      TextButton(
-                          style: TextButton.styleFrom(
-                            minimumSize: Size.zero,
-                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              isRequesting = true;
-                              isDonating = false;
-                              // isBookmarks = false;
-                            });
-                          },
-                          child: Text(
-                            'Requests',
-                            style: isRequesting
-                                ? const TextStyle(
-                                    color: Color.fromARGB(255, 65, 82, 31),
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600)
-                                : const TextStyle(
-                                    color: Color.fromARGB(255, 245, 195, 150),
-                                    fontSize: 16),
-                          )),
-
-                      //Donating
-                      TextButton(
-                        style: TextButton.styleFrom(
-                          minimumSize: Size.zero,
-                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            isRequesting = false;
-                            isDonating = true;
-                            // isBookmarks = false;
-                          });
-                        },
-                        child: Text('Donations',
-                            style: isDonating
-                                ? const TextStyle(
-                                    color: Color.fromARGB(255, 65, 82, 31),
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                  )
-                                : const TextStyle(
-                                    color: Color.fromARGB(255, 245, 195, 150),
-                                    fontSize: 16)),
-                      ),
-
-                      /*BOOKMARKS
+                              /*BOOKMARKS
                       TextButton(
                         style: TextButton.styleFrom(
                           minimumSize: Size.zero,
@@ -231,26 +228,38 @@ class MyAccountPageState extends State<MyAccountPage> {
                                     color: Color.fromARGB(255, 245, 195, 150),
                                     fontSize: 16)),
                       ),*/
-                    ],
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 6,
+                          )
+                        ],
+                      )
+                    ]),
                   ),
                   const SizedBox(
-                    height: 6,
-                  )
-                ],
-              )
-            ]),
-          ),
-          const SizedBox(
-            height: 3,
-          ),
-          // ASSUMING DP AND USERNAME ARE GOOGLE ACCOUNT
-          Expanded(
-              child: isDonating
-                  ? accDonatingPostViewer(widget.user, widget.googleSignIn,
-                      widget.user.photoUrl, widget.user.displayName)
-                  : accRequestingPostViewer(widget.user, widget.googleSignIn,
-                      widget.user.photoUrl, widget.user.displayName)),
-        ]));
+                    height: 3,
+                  ),
+                  // ASSUMING DP AND USERNAME ARE GOOGLE ACCOUNT
+                  Expanded(
+                      child: isDonating
+                          ? accDonatingPostViewer(
+                              widget.user,
+                              widget.googleSignIn,
+                              "${data['dp']}",
+                              "${data['name']}")
+                          : accRequestingPostViewer(
+                              widget.user,
+                              widget.googleSignIn,
+                              "${data['dp']}",
+                              "${data['name']}")),
+                ]);
+              }
+              return Container(
+                color: Colors.white,
+                child: const Center(child: CircularProgressIndicator()),
+              );
+            }));
   }
 }
 

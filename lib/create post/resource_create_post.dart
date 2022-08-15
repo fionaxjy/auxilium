@@ -65,39 +65,43 @@ class CreateResourcePostState extends State<CreateResourcePost> {
   @override
   Widget build(BuildContext context) {
     Widget postButton() {
-      return TextButton(
-          onPressed: () async {
-            await postsRef.doc(widget.user.id).collection('Posts').add({
-              "causeTag": selectedTag,
-              "postage": selectedCol,
-              "condition": selectedCond,
-              "title": tempTitle,
-              "content": tempContent,
-              "reqOrDonTag": reqOrDonTag,
-              "dateAndTime": timestamp,
-              "quantity": tempQuantity,
-            }).then(
-                /*(value) => showComments(
-                  widget.user,
-                  widget.googleSignIn,
-                  context,
-                  postId: value.id,
-                  userId: widget.user.id,
-                  userDp: widget.user.photoUrl,
-                ));*/
-                (value) => Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) =>
-                        CommunityPage(widget.user, widget.googleSignIn))));
-          },
-          child: const Padding(
-              padding: EdgeInsets.only(right: 8),
-              child: Text(
-                'share',
-                style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Color.fromARGB(255, 65, 82, 31)),
-              )));
+      return FutureBuilder<DocumentSnapshot>(
+          future: postsRef.doc(widget.user.id).get(),
+          builder:
+              (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+            Map<String, dynamic> data =
+                snapshot.data.data() as Map<String, dynamic>;
+
+            return TextButton(
+                onPressed: () async {
+                  await postsRef.doc(widget.user.id).collection('Posts').add({
+                    "causeTag": selectedTag,
+                    "postage": selectedCol,
+                    "condition": selectedCond,
+                    "title": tempTitle,
+                    "content": tempContent,
+                    "reqOrDonTag": reqOrDonTag,
+                    "dateAndTime": timestamp,
+                    "quantity": tempQuantity,
+                    "userId": widget.user.id,
+                    "userDp": data['dp'],
+                    "username": data['name'],
+                    "comments": 0,
+                  }).then((value) => Navigator.of(context).push(
+                      MaterialPageRoute(
+                          builder: (context) => CommunityPage(
+                              widget.user, widget.googleSignIn))));
+                },
+                child: const Padding(
+                    padding: EdgeInsets.only(right: 8),
+                    child: Text(
+                      'share',
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(255, 65, 82, 31)),
+                    )));
+          });
     }
 
     DropdownMenuItem<String> buildMenuItem(String value) => DropdownMenuItem(
@@ -126,7 +130,8 @@ class CreateResourcePostState extends State<CreateResourcePost> {
             buildNavBar(context, widget.user, widget.googleSignIn),
         body: Padding(
           padding: const EdgeInsets.all(15),
-          child: Column(
+          child: Expanded(
+              child: Column(
             children: [
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -201,14 +206,14 @@ class CreateResourcePostState extends State<CreateResourcePost> {
                 ),
               ]),
 
-              Divider(
+              const Divider(
                 height: 5,
               ),
 
               // Title
               TextFormField(
                 style: const TextStyle(fontSize: 18, height: 1.4),
-                maxLength: 150,
+                maxLength: 100,
                 initialValue: tempTitle,
                 onChanged: (content) {
                   tempTitle = content;
@@ -246,7 +251,7 @@ class CreateResourcePostState extends State<CreateResourcePost> {
                     hintText: 'insert description here...',
                     hintStyle: TextStyle(fontSize: 18)),
                 keyboardType: TextInputType.multiline,
-                maxLines: 16,
+                maxLines: 13,
                 autofocus: true,
               ),
 
@@ -313,7 +318,7 @@ class CreateResourcePostState extends State<CreateResourcePost> {
                 ])),
               ),
             ],
-          ),
+          )),
         ));
   }
 }

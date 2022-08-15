@@ -62,18 +62,9 @@ class CreateMoneyPostState extends State<CreateMoneyPost> {
               "reqOrDonTag": reqOrDonTag,
               "dateAndTime": timestamp,
               "quantity": tempQuantity,
-            }).then(
-                /*(value) => showComments(
-                  widget.user,
-                  widget.googleSignIn,
-                  context,
-                  postId: value.id,
-                  userId: widget.user.id,
-                  userDp: widget.user.photoUrl,
-                ));*/
-                (value) => Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) =>
-                        CommunityPage(widget.user, widget.googleSignIn))));
+            }).then((value) => Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) =>
+                    CommunityPage(widget.user, widget.googleSignIn))));
           },
           child: const Padding(
               padding: EdgeInsets.only(right: 8),
@@ -164,10 +155,68 @@ class CreateMoneyPostState extends State<CreateMoneyPost> {
                         ],
                       ),
                       Row(children: [
-                        Text(
-                          formatCurrency.format(tempQuantity),
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18),
+                        InkWell(
+                          child: Text(
+                            formatCurrency.format(tempQuantity),
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 18),
+                          ),
+                          onTap: () {
+                            showModalBottomSheet(
+                              context: context,
+                              builder: (context) {
+                                return Column(children: [
+                                  const Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 20),
+                                    child: Center(
+                                        child: Text(
+                                      'enter amount',
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.black87),
+                                    )),
+                                  ),
+                                  Center(
+                                      child: TextFormField(
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 40,
+                                        color: Color.fromARGB(255, 65, 82, 31)),
+                                    decoration: const InputDecoration(
+                                      prefixIcon: Padding(
+                                          padding:
+                                              EdgeInsets.fromLTRB(110, 3, 0, 3),
+                                          child: Text('\$',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 40,
+                                                color: Color.fromARGB(
+                                                    255, 95, 95, 95),
+                                              ))),
+                                      border: InputBorder.none,
+                                    ),
+
+                                    validator: (String amount) {
+                                      return (amount != null)
+                                          ? 'Enter a donation greater than \$0.'
+                                          : null;
+                                    },
+                                    keyboardType:
+                                        const TextInputType.numberWithOptions(
+                                            decimal: true),
+                                    textAlign: TextAlign.center,
+                                    initialValue:
+                                        tempQuantity.toStringAsFixed(2),
+                                    onChanged: (value) => setState(() =>
+                                        tempQuantity = double.parse(value)),
+                                    // *** ISSUE WITH DECIMAL PLACES, IF INPUT IS 0.001, DATABASE REFLECTS 0.001 INSTEAD OF ROUNDING UP ***
+                                    autofocus: true,
+                                  ))
+                                ]);
+                              },
+                            );
+                          },
                         ),
                         IconButton(
                             onPressed: () {
@@ -187,7 +236,8 @@ class CreateMoneyPostState extends State<CreateMoneyPost> {
                                             color: Colors.black87),
                                       )),
                                     ),
-                                    TextFormField(
+                                    Center(
+                                        child: TextFormField(
                                       keyboardType: TextInputType.number,
                                       style: const TextStyle(
                                           fontWeight: FontWeight.bold,
@@ -195,17 +245,26 @@ class CreateMoneyPostState extends State<CreateMoneyPost> {
                                           color:
                                               Color.fromARGB(255, 65, 82, 31)),
                                       decoration: const InputDecoration(
+                                        prefixIcon: Padding(
+                                            padding: EdgeInsets.fromLTRB(
+                                                110, 3, 0, 3),
+                                            child: Text('\$',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 40,
+                                                  color: Color.fromARGB(
+                                                      255, 95, 95, 95),
+                                                ))),
                                         border: InputBorder.none,
                                       ),
                                       textAlign: TextAlign.center,
                                       initialValue:
-                                          formatCurrency.format(tempQuantity),
+                                          tempQuantity.toStringAsFixed(2),
                                       onChanged: (value) => setState(() =>
-                                          tempQuantity = double.parse(
-                                              value.replaceAll('\$', ''))),
+                                          tempQuantity = double.parse(value)),
                                       // *** ISSUE WITH DECIMAL PLACES, IF INPUT IS 0.001, DATABASE REFLECTS 0.001 INSTEAD OF ROUNDING UP ***
                                       autofocus: true,
-                                    )
+                                    ))
                                   ]);
                                 },
                               );
@@ -316,7 +375,7 @@ class CreateMoneyPostState extends State<CreateMoneyPost> {
                     hintText: 'insert description here...',
                     hintStyle: TextStyle(fontSize: 18, color: Colors.black38)),
                 keyboardType: TextInputType.multiline,
-                maxLines: 22,
+                maxLines: 8,
                 autofocus: true,
               ),
             ],

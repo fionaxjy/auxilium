@@ -43,21 +43,16 @@ class CausesPage extends StatelessWidget {
         itemBuilder: (context, index) {
           return Card(
               child: ListTile(
-            leading: causeList[index].icons,
-            title: Text(
-              causeList[index].category,
-              style: const TextStyle(fontSize: 20),
-            ),
-            subtitle: Text(
-              "${causeList[index].numPost} Posts",
-              style: const TextStyle(fontSize: 12),
-            ),
-            onTap: () => Navigator.of(context).push(
-              MaterialPageRoute(
-                  builder: (context) =>
-                      paymentAmtAlert(context, user, googleSignIn)),
-            ),
-          ));
+                  leading: causeList[index].icons,
+                  title: Text(
+                    causeList[index].category,
+                    style: const TextStyle(fontSize: 20),
+                  ),
+                  subtitle: Text(
+                    "${causeList[index].numPost} Posts",
+                    style: const TextStyle(fontSize: 12),
+                  ),
+                  onTap: () => paymentAmtAlert(context, user, googleSignIn)));
         },
       ),
       bottomNavigationBar: buildNavBar(context, user, googleSignIn),
